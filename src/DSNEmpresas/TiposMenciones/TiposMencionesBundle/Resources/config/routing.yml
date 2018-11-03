@@ -1,0 +1,14 @@
+insertTiposMenciones:
+  pattern : /admin/tiposmenciones/new
+  defaults: { _controller: TiposMencionesBundle:TiposMenciones:insert }
+showTipoMencion:
+  pattern : /admin/tiposmenciones/show/{id}.{_format}
+  defaults: { _controller: TiposMencionesBundle:TiposMenciones:showOne }
+  requirements:
+    _format: 'html'
+showTiposMenciones:
+  pattern : /admin/tiposmenciones/show/{page}
+  defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'TiposMenciones' }
+deleteTiposMenciones:
+  pattern : /admin/mencion/delete/{id}
+  defaults: { _controller: TiposMencionesBundle:TiposMenciones:delete }

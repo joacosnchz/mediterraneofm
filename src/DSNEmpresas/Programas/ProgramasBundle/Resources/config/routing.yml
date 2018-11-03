@@ -1,0 +1,14 @@
+insertProgramas:
+  pattern : /admin/programas/new
+  defaults: { _controller: ProgramasBundle:Programas:insert }
+showProgramas:
+  pattern : /admin/programas/show/{page}/{cl}
+  defaults: { _controller: ProgramasBundle:Programas:show, page: 1, cl: false }
+showPrograma:
+  pattern : /admin/p/{id}/{nombre}.{_format}
+  defaults: { _controller: ProgramasBundle:Programas:showOne }
+  requirements:
+      _format: html
+deletePrograma:
+  pattern: /admin/programa/delete/{id}
+  defaults: { _controller: ProgramasBundle:Programas:delete }

@@ -1,0 +1,29 @@
+showCliente:
+  pattern : /c/{nombre}/{nombre2}.{_format}
+  defaults: { _controller: ClientesBundle:Clientes:showOne }
+  requirements:
+      _format:  html
+insertClientes:
+  pattern : /clientes/new
+  defaults: { _controller: ClientesBundle:Clientes:insert }
+  requirements:
+        _method:  GET
+insertSTClientes:
+  pattern : /clientes/newST
+  defaults: { _controller: ClientesBundle:Clientes:insertST }
+  requirements:
+        _method:  GET
+insertClientesSuccess:
+  pattern : /clientes/new
+  defaults: { _controller: ClientesBundle:Clientes:insertSuccess }
+  requirements:
+        _method:  POST
+showClientes:
+  pattern : /clientes/show/{page}/{clear}
+  defaults: { _controller: ClientesBundle:Clientes:show, page: 1, clear: false }
+deleteCliente:
+  pattern: /admin/cliente/delete/{id}
+  defaults: { _controller: ClientesBundle:Clientes:delete }
+cambiarEstado:
+  pattern: /cliente/estado/{id}
+  defaults: { _controller: ClientesBundle:Clientes:cambiarEstado }

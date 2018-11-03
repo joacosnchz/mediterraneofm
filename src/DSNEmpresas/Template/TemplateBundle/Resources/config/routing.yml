@@ -1,0 +1,6 @@
+searchEntity:
+    pattern:  /searchEntity
+    defaults: { _controller: TemplateBundle:Default:searchEntity }
+accesoDenegado:
+    pattern:  /mensaje/accesoDenegado
+    defaults: { _controller: TemplateBundle:Default:accesoDenegado }

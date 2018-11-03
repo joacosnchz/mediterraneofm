@@ -1,0 +1,160 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block js %}
+    <script src="{{ asset('bundles/template/js/phpjs.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/ordenpub/js/bundleCustomJs.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/ordenpub/js/renovarModuleCustomJs.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Orden de publicidad{% endblock %}
+
+{% block content %}
+    <form action="{{ path('insertOrdenPub') }}" method="post" id="form1">
+        <table>
+            <tr style="height:32px;"><th colspan="2"><h3>Alta de Orden de publicidad</h3></th></tr>
+            <tr style="height:32px;"><td>{{ form_errors(form) }}</td></tr>
+            <tr style="height:32px;"><td>{{ form_label(form.fecha) }}</td><td>{{ form_widget(form.fecha) }}</td></tr>
+            <tr style="height:32px;"><td>{{ form_label(form.id_cliente) }}</td><td>{{ form_widget(form.id_cliente) }}</td></tr>
+            <tr style="height:32px;"><td>{{ form_label(form.texto_publicidad) }}<div id="info">Máximo 400 caracteres</div></td><td>{{ form_widget(form.texto_publicidad) }}</td></tr>
+            <tr><td>{{ form_label(form.observaciones) }}</td><td>{{ form_widget(form.observaciones) }}</td></tr>
+            {# Campos ocultos para el procesamiento de la renovación #}
+            <tr><td>{{ form_widget(form.renovar) }}</td></tr>
+            <tr><td>{{ form_widget(form.id_ordenvieja) }}</td></tr>
+            <tr><td>{{ form_widget(form.confirmation) }}</td></tr>
+            {# EOF campos ocultos #}
+            <tr><td><a href="#" class="add_tag_link" id="underlined">Agregar pauta</a></td></tr>
+        </table>
+    
+    <div id="pautasForm" style="display: none">
+        <select class="emisoras">
+            <option value="0">Seleccione emisora</option>
+            {% for item in emisoras %}
+                <option value="{{ item.getIdEmisora }}">{{ item.getNombre }}</option>
+            {% endfor %}
+        </select>
+        <select class="tarifas">
+            <option value="0">Seleccione tarifa</option>
+        </select>
+        <select class="pautas">
+            <option value="0">Seleccione pauta</option>
+        </select>
+    </div>
+            
+    <ul id="collectionHolder" data-prototype="
+        {% filter escape %}
+            {{ include('OrdenPubBundle::pautasPrototype.html.twig', {'form': form.id_tarifa.vars.prototype}) }}
+        {% endfilter %}
+        {# {{ form_widget(form.id_tarifa.vars.prototype)|e }} #}
+        ">
+        <li></li>
+        {% if form.id_tarifa is defined %}
+            {% for tarifa in form.id_tarifa %}
+                <li id="pautasFormHolder{{ loop.index0 }}">
+                    <script>
+                        $(function() {
+                            var form = $('#pautasForm').clone();
+                            form.find('.emisoras').attr('id', 'emisoras'+{{ loop.index0 }});
+                            form.find('.tarifas').attr('id', 'tarifas'+{{ loop.index0 }});
+                            form.find('.pautas').attr('id', 'pautas'+{{ loop.index0 }});
+
+                            $('#addPautasForm{{ loop.index0 }}').html(form.html());
+                        });
+                    </script>
+                    <div id="addPautasForm{{ loop.index0 }}"></div>
+                    <table>
+                        <tr><td>{{ form_widget(tarifa.id_costotarifas) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.fecha_desde) }}</td><td>{{ form_widget(tarifa.fecha_desde, {attr: {class: 'fechaDesde' } }) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.fecha_hasta) }}</td><td>{{ form_widget(tarifa.fecha_hasta, {attr: {class: 'fechaHasta' } }) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.descuento) }}</td><td>{{ form_widget(tarifa.descuento) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.recargo) }}</td><td>{{ form_widget(tarifa.recargo) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.neto) }}</td><td>{{ form_widget(tarifa.neto) }}</td></tr>
+                        <tr><td>{{ form_label(tarifa.total) }}</td><td>{{ form_widget(tarifa.total) }}</td></tr>
+                    </table>
+                    {# <div id="addPautasForm{{ loop.index0 }}"></div>
+                    {{ form_row(tarifa.id_costotarifas) }}
+                    {{ form_row(tarifa.fecha_desde) }}
+                    {{ form_row(tarifa.fecha_hasta) }}
+                    {{ form_row(tarifa.descuento) }}
+                    {{ form_row(tarifa.recargo) }}
+                    {{ form_row(tarifa.neto) }}
+                    {{ form_row(tarifa.total) }} #}
+                </li>
+                <script>
+                    $(function() {
+                        var pautFormHolder = $('#pautasFormHolder{{ loop.index0 }}');
+                        addTagFormDeleteLink(pautFormHolder);
+                        
+                        $( "#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_" + {{ loop.index0 }} + "_fecha_desde, #mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_" + {{ loop.index0 }} + "_fecha_hasta" ).datepicker({ 
+                            dateFormat: "dd-mm-yy",
+                        });
+
+                        $( '#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_desde' ).focus(function() {
+                            $( '#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_desde' ).tooltip( "disable" );
+                        });
+
+                        $( '#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_hasta' ).focus(function() {
+                            $( '#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_hasta' ).tooltip( "disable" );
+                        });
+
+                        $( '#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_desde, #mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_fecha_hasta' ).tooltip({
+                            position: {
+                                my: "top-35",
+                                at: "top-35",
+                            },
+                        });
+                        
+                        $('#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_descuento').live('change paste keyup input', function() {
+                            calc({{ loop.index0 }});
+                        });
+
+                        $('#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_recargo').live('change paste keyup input', function() {
+                            calc({{ loop.index0 }});
+                        });
+
+                        $('#mediterraneofm_mediterraneofmbundle_renovarordenpubtype_id_tarifa_' + {{ loop.index0 }} + '_neto').live('change paste keyup input', function() {
+                            calc({{ loop.index0 }});
+                        });
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
+    </ul>
+    
+    {# autocompletar las tarifas #}
+    {% if condvieja is defined %}
+        {% for item in condvieja %}
+            <script>
+                $(function() {
+                    $('#emisoras' + {{ loop.index0 }} + '>option[value="' + {{ item.getIdCostoTarifas.getIdTarifa.getIdEmisora.getIdEmisora }} + '"]').attr('selected', 'selected').trigger('change');
+                    
+                    $('#tarifas' + {{ loop.index0 }}).bind('DOMSubtreeModified', function() {
+                        $('#tarifas' + {{ loop.index0 }} + '>option[value="' + {{ item.getIdCostoTarifas.getIdTarifa.getIdTarifa }} + '"]').attr('selected', 'selected').trigger('change');
+                    });
+
+                    $('#pautas' + {{ loop.index0 }}).bind('DOMSubtreeModified', function() {
+                        $('#pautas' + {{ loop.index0 }} + '>option[value="' + {{ item.getIdCostoTarifas.getIdCostoTarifas }} + '-' + {{ item.getIdCostoTarifas.getCosto }} + '"]').attr('selected', 'selected'); 
+                    });
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+    {# EOF autocompletar #}
+    
+    {# Mostrar grillas de programacion #}
+    {{ render(controller('GrillasBundle:Grillas:show', {'select': 'all'})) }}
+    {# EOF grillas de programacion #}
+    
+    <hr>
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>
+    <input type="submit" value="aceptar"/>
+    <input type="reset" value="cancelar" onclick="window.location='{{ path('showOrdenesPub') }}'"/>
+    </form>
+        
+    <div id="dialog" title="Alta de clientes">
+        {{ render(controller('ClientesBundle:Clientes:insertST')) }}
+    </div>
+
+    <div id="dialog2" title="Confirmar">
+        <p>Está a punto de generar una orden de publicidad.<br><span style="font-weight: bold">¿ Está seguro ?</span></p>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<script>
+    function justNumbers(e) {
+        var keynum = window.event ? window.event.keyCode : e.which;
+        if ((keynum == 8) || (keynum == 46))
+            return true;
+         
+        return /\d/.test(String.fromCharCode(keynum));
+    }
+</script>
+
+<table class="resp">
+    <tr><td>&nbsp;</td></tr>
+    <tr><td id="underlined">Condiciones (*)</td></tr>
+    <tr id="option"><td>Emisora</td><td>Desde</td><td>Hasta</td><td>Recargo %</td><td>Descuento %</td><td>Neto</td>{# <td>Total</td> #}</tr>
+    {% if hidden == 1 %}
+        {% for emi in id_emis %}
+            <tr>
+                <td>{{ emi.getIdTarifa.getIdEmisora.getNombre }}:</td>
+                <td><input title="Click en el campo para completarlo." required="required" type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.fecha_desde }}"{% endif %}{% endfor %} required="required" id="fecha_desde_{{ emi.getIdTarifa.getIdEmisora }}" name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][fecha_desde]" size="4" placeholder="Fecha desde"></td>
+                <td><input title="Click en el campo para completarlo." type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.fecha_hasta }}"{% endif %}{% endfor %} id="fecha_hasta_{{ emi.getIdTarifa.getIdEmisora }}" required="required" name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][fecha_hasta]" size="4" placeholder="Fecha hasta"></td>
+                <td><input type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.recargo }}"{% endif %}{% endfor %} name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][recargo]" size="1" maxlength="3" placeholder="Rec. %"></td>
+                <td><input type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.descuento }}"{% endif %}{% endfor %} name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][descuento]" size="1" maxlength="3" placeholder="Desc. %"></td>
+                <td><input required="required"  type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.neto }}"{% endif %}{% endfor %} name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][neto]" id="{{ emi.getIdTarifa.getIdEmisora }}_neto" size="5" onkeypress="return justNumbers(event);" placeholder="Neto"></td>
+                {# <td><input type="text" {% for d, d2 in valores %}{% if emi.getIdTarifa.getIdEmisora.getIdEmisora == d %}value="{{ d2.total }}"{% endif %}{% endfor %} name="condiciones[{{ emi.getIdTarifa.getIdEmisora }}][total]" required="required"  size="5" onkeypress="return justNumbers(event);"></td> #}</tr>
+        {% endfor %}
+    {% else %}
+        {% for emi in emisoras %}
+                <tr>
+                    <td>{{ emi.getNombre }}:</td>
+                    <td><input title="Click en el campo para completarlo." type="text" id="fecha_desde_{{ emi }}" name="condiciones[{{ emi }}][fecha_desde]" size="4" placeholder="Fecha desde"></td>
+                    <td><input title="Click en el campo para completarlo." type="text" id="fecha_hasta_{{ emi }}" name="condiciones[{{ emi }}][fecha_hasta]" size="4" placeholder="Fecha hasta"></td>
+                    <td><input type="text" name="condiciones[{{ emi }}][recargo]" size="1" maxlength="3" onkeypress="return justNumbers(event);" placeholder="Rec. %"></td>
+                    <td><input type="text" name="condiciones[{{ emi }}][descuento]" size="1" maxlength="3" onkeypress="return justNumbers(event);" placeholder="Desc. %"></td>
+                    <td><input type="text" id="{{ emi.getIdEmisora }}_neto" name="condiciones[{{ emi }}][neto]" size="5" onkeypress="return justNumbers(event);" placeholder="Neto"></td>
+                    {# <td><input type="text" onkeypress="return justNumbers(event);" name="condiciones[{{ emi }}][total]" size="5"></td> #}
+                </tr>
+        {% endfor %}
+    {% endif %}
+</table>

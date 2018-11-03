@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %} Impresión {% endblock %}</title>
+        <style>
+            ul#first {
+                list-style: none;
+            }
+        </style>
+    </head>
+    <body>
+        {% if membrete %}
+        <img alt="membrete" src="{{ web_dir }}{{ asset('bundles/template/images/agencias/') }}{{ membrete }}" />
+        {% endif %}
+
+        <h3>Tarifas al {{ "now"|date('d-m-Y') }}</h3>
+
+        {% for item in tarifas %}
+            <ul id="first">
+                <li><h4>{{ item.getNombre }}</h4></li>
+                <table rules="rows" border="1" bordercolor="#808080" frame="below" cellpadding="5">
+                <tr>
+                <td>Menciones</td>
+                <td>Duracion(s)</td>
+                <td>Periodo</td>
+                <td>Costo($)</td>
+                </tr>
+                    {% for item2 in attribute(pautas, item.getIdTarifa) %}
+                        {% if (loop.index % 2) == 0 %}
+                        <tr style="background-color: #EAE3E3">
+                        {% else %}
+                        <tr>
+                        {% endif %}
+                        <td>{{ item2.getIdTipoMencion.getNroMenciones }}</td>
+                        <td>{{ item2.getDuracion }}</td>
+                        <td>{{ item2.getPeriodo|lower }}</td>
+                        <td>{{ item2.getCosto|number_format(2, ',', '.') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </ul>
+        {% endfor %}
+        </table>
+    </body>
+</html>

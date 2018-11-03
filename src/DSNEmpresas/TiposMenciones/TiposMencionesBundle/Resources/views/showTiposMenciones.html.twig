@@ -1,0 +1,45 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de menciones{% endblock %}
+
+{% block entidad %}menciones{% endblock %}
+
+{% block datos %}<td>Nro. menciones</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value="{{ item.getId }}" id="{{ item.getId }}" class="tf"></td>
+<td>{{ item.getNroMenciones }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertTiposMenciones') }}'" >Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+{# <td><button id="editar">Editar</button></td> #}
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar:
+<form name="TiposMenciones" action="{{ path('listado', {'entidad': 'TiposMenciones', 'page': 1}) }}" method="POST">
+    <input id="TiposMenciones" name="TiposMenciones" value="{{ app.session.get('TiposMenciones') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showTarifas') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteTiposMenciones', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showTipoMencion', {'id': "PLACEHOLDER", '_format': 'html' }) }}";{% endblock %}

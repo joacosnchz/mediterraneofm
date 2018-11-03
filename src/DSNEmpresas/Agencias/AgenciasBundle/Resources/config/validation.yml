@@ -1,0 +1,14 @@
+DSNEmpresas\Agencias\AgenciasBundle\Entity\Agencias:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        apellido:
+            - NotBlank: 
+                message: El campo apellido no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El apellido no puede tener mas de {{ limit }} caracteres."

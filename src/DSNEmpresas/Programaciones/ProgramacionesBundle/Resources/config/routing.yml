@@ -1,0 +1,17 @@
+insertProgramaciones:
+  pattern : /admin/programaciones/new
+  defaults: { _controller: ProgramacionesBundle:Programaciones:insert }
+#showProgramaciones:
+  #pattern : /admin/programaciones/show/{page}
+  #defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'Programaciones' }
+showProgramaciones:
+  pattern : /admin/programaciones/show/{page}
+  defaults: { _controller: ProgramacionesBundle:Programaciones:show, page: 1 }
+deleteProgramacion:
+  pattern: /admin/programaciones/delete/{id}
+  defaults: { _controller: ProgramacionesBundle:Programaciones:delete }
+showProgramacion:
+  pattern : /admin/pro/{id}/{nombre}.{_format}
+  defaults: { _controller: ProgramacionesBundle:Programaciones:showOne }
+  requirements:
+      _format:  html

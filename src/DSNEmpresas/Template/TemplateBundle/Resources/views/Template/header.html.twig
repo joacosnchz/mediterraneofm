@@ -1,0 +1,14 @@
+{% block header %}
+<header class="wrapper-header">
+    {% if app.user %}
+        {% if app.user.idagencia.path %}
+            <table class="tableHeader" style="background:url({{ asset('bundles/template/images/agencias/') }}{{ app.user.idagencia.path }}) no-repeat;">
+        {% else %}
+            <table class="tableHeader" style="background:url({{ asset('bundles/template/images/agencias/header2.jpg') }}) no-repeat;">
+        {% endif %}
+    {% else %}
+        <table class="tableHeader" style="background:url({{ asset('bundles/template/images/agencias/header2.jpg') }}) no-repeat;">
+    {% endif %}
+    </table>
+</header>
+{% endblock %}

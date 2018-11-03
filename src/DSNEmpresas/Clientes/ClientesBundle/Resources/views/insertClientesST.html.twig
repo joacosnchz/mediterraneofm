@@ -1,0 +1,20 @@
+{% block content %}
+
+<form action="{{ path('insertClientesSuccess') }}" method="post" {{ form_enctype(form) }}>
+
+    <table class="resp">
+        <tr><th colspan="2"><h3>Alta de clientes</h3></th></tr>
+                {% for form in form %}
+        <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+                {% endfor %}
+                {# <tr><td><label for="tags">Tags: </label></td><td><input id="tags" /></td></tr> #}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="reset" value="cancelar" id="cl"/>
+</form>
+
+{% endblock %}

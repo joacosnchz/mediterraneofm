@@ -1,0 +1,69 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de tarifas{% endblock %}
+
+{% block entidad %}tarifas{% endblock %}
+
+{% block datos %}<td>Nombre</td><td>Fecha desde</td><td>Fecha hasta</td><td>Emisora</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value2="{{ item.getNombre|replace(' ', '-') }}" value="{{ item.getIdTarifa }}" id="{{ item.getNombre }}" class="tf"></td>
+<td><a href="{{ path('showTarifa', {'nombre': item.getIdTarifa, 'nombre2':item.getNombre|replace(' ', '-'), '_format': 'html'}) }}" id="underlined">{{ item.getNombre }}</a></td>
+<td id="option">{{ item.getFechaDesde|date('d-m-Y') }}</td>
+<td><span id="onlyresp">Hasta el&nbsp;</span>{{ item.getFechaHasta|date('d-m-Y') }}</td>
+<td id="option">{{ item.getIdEmisora.getNombre }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertTarifas') }}'" >Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="editar">Editar</button></td>
+<td><button id="tarifario">Exportar tarifario</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+    $(function() {
+        $('#tarifario').click(function() {
+            var ids;
+
+            ids = $('input[type=checkbox]:checked').map(function() {
+                return $(this).attr('value');
+            }).get();
+
+            if(ids.length > 0) {
+                var route = "{{ path('showTarifarioPdf', { 'id': "PLACEHOLDER" }) }}";
+                window.open(route.replace("PLACEHOLDER", ids));
+            }
+            else {
+                $( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>');
+            }
+        });
+    });
+</script>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Tarifas" action="{{ path('showTarifas', {'page': 1}) }}" method="POST">
+    <input id="Tarifas" name="Tarifas" value="{{ app.session.get('Tarifas') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showTarifas') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteTarifa', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showTarifa', { 'nombre': "PLACEHOLDER", 'nombre2': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

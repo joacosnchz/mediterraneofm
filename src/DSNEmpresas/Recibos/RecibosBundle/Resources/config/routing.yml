@@ -1,0 +1,15 @@
+insertRecibos:
+  pattern : /admin/recibos/new
+  defaults: { _controller: RecibosBundle:Recibos:insert }
+#showRecibos:
+  #pattern : /admin/recibos/show/{page}
+  #defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'Recibos' }
+showRecibos:
+  pattern : /admin/recibos/show/{page}
+  defaults: { _controller: RecibosBundle:Recibos:show, page: 1 }
+showRecibo:
+  pattern : /admin/rbo/{nombre}.html
+  defaults: { _controller: RecibosBundle:Recibos:showOne }
+deleteRecibo:
+  pattern: /admin/recibos/delete/{id}
+  defaults: { _controller: RecibosBundle:Recibos:delete }

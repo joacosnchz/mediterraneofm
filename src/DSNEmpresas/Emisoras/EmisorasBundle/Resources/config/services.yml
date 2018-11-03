@@ -1,0 +1,7 @@
+parameters:
+#    emisoras.example.class: DSNEmpresas\Emisoras\EmisorasBundle\Example
+
+services:
+#    emisoras.example:
+#        class: %emisoras.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

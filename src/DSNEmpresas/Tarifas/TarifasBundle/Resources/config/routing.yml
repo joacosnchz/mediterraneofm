@@ -1,0 +1,20 @@
+showTarifa:
+  pattern : /admin/t/{nombre}/{nombre2}.{_format}
+  defaults: { _controller: TarifasBundle:Tarifas:showOne }
+  requirements:
+      _format:  html
+insertTarifas:
+  pattern : /admin/tarifas/new
+  defaults: { _controller: TarifasBundle:Tarifas:insert }
+#showTarifas:
+  #pattern : /admin/tarifas/show/{page}
+  #defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'Tarifas' }
+showTarifas:
+  pattern : /admin/tarifas/show/{page}
+  defaults: { _controller: TarifasBundle:Tarifas:show, page: 1 }
+deleteTarifa:
+  pattern: /admin/tarifa/delete/{id}
+  defaults: { _controller: TarifasBundle:Tarifas:delete }
+showTarifarioPdf:
+  pattern : /admin/tarifario/show/{id}
+  defaults: { _controller: TarifasBundle:Tarifas:showTarifarioPdf }

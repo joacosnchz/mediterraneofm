@@ -1,0 +1,47 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}{{ recibo.getNombre }}{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/template/js/jquery-1.8.3.js') }}"></script>
+<script src="{{ asset('bundles/template/js/jquery-ui-1.9.2.custom.js') }}"></script>
+<script>
+    $(function() {
+        var availableCiudades = [
+         {% render "MediterraneoFMBundle:Ciudades:getCiudades" %}
+        ];
+        $( "#mediterraneofm_mediterraneofmbundle_editrecibostype_id_ciudad" ).autocomplete({
+            source: availableCiudades
+        });
+    });
+</script>
+<script>
+$(function() {
+$( "#mediterraneofm_mediterraneofmbundle_editrecibostype_fecha" ).datepicker({ dateFormat: "dd-mm-yy" });
+});
+</script>
+<script>
+$(function() {
+$( document ).tooltip();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+        
+<form action="{{ path('showRecibo', {'nombre': recibo.getNroRecibo }) }}" method="post" {{ form_enctype(form) }}>        
+    <table>
+        <tr><th colspan="2"><h3>Edición de emisoras</h3></th></tr>
+                {% for form in form %}
+        <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+                {% endfor %}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="button" name="back" value="Cancelar" onclick="window.location='{{ path('showRecibos') }}'" />
+</form>
+
+{% endblock %}

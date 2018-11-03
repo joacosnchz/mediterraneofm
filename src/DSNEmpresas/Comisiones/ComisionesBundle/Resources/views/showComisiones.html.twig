@@ -1,0 +1,46 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de comisiones{% endblock %}
+
+{% block entidad %}comisiones{% endblock %}
+
+{% block datos %}<td>Descripcion</td><td>Valor %</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value="{{ item.getId }}" value2="{{ item.getDescripcion }}" class="tf" id="{{ item.getId }}"></td>
+<td><a id="underlined" href="{{ path('showComision', {'id': item.getId, 'nombre': item.getDescripcion|replace(' ','-') , '_format': 'html'}) }}">{{ item.getDescripcion }}</a></td>
+<td align="center">{{ item.getValor|number_format(2, ',', '.') }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertComisiones') }}'" />Nuevo</button></td>
+<td><button id="borrar">Borrar</button>
+<td><button id="editar">Editar</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Comisiones" action="{{ path('showComisiones', {'page': 1}) }}" method="POST">
+<input id="Comisiones" name="Comisiones" value="{{ app.session.get('Comisiones') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showComisiones') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteComisiones', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showComision', { 'id': "PLACEHOLDER", 'nombre': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

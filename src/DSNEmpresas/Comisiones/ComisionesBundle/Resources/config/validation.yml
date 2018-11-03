@@ -1,0 +1,5 @@
+DSNEmpresas\Comisiones\ComisionesBundle\Entity\Comisiones:
+    properties:
+        valor:
+            - Type: 
+                type: float

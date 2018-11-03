@@ -1,0 +1,43 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de ciudades{% endblock %}
+
+{% block entidad %}ciudades{% endblock %}
+
+{% block datos %}<td>Nombre</td><td>Provincia</td>{% endblock %}
+
+{% block datos_lista %}
+<td name="list00"><input type="checkbox" name="link[]" value="{{ item.getId }}" value2="{{ item.getNombre }}" id="{{ item.getId }}" class="tf"></td>
+<td><a href="{{ path('showCiudad', {'id': item.getId|url_encode(), 'nombre': item.getNombre, '_format': 'html'}) }}" id="underlined">{{ item.getNombre }}</a></td>
+<td>{{ item.getIdProvincia.getNombre }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertCiudades') }}'" >Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="editar">Editar</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: <form name="Ciudades" action="{{ path('showCiudades', {'page': 1}) }}" method="POST"><input id="Ciudades" name="Ciudades" value="{{ app.session.get('Ciudades') }}" size="1" maxlength="3"></form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showCiudades') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteCiudades', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showCiudad', { 'id': "PLACEHOLDER", 'nombre': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

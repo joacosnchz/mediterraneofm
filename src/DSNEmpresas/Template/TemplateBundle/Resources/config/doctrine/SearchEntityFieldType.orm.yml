@@ -1,0 +1,20 @@
+DSNEmpresas\Template\TemplateBundle\Entity\SearchEntityFieldType:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        result:
+            type: string
+            length: '50'
+        search:
+            type: string
+            length: '50'
+        property:
+            type: string
+            length: '50'
+    lifecycleCallbacks: {  }

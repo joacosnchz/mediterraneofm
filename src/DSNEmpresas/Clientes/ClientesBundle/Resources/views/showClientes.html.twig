@@ -1,0 +1,203 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}Lista de clientes{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/clientes/js/listadoCustomJs.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice"><div id="success">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="flash-notice"><div id="error">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+<span id="message"></span>
+
+<table class="resp" cellpadding="5px">
+    <tr><th colspan="5"><h3>Lista de clientes</h3></th></tr>
+</table>
+
+<fieldset>
+    <legend>Herramientas</legend>
+    <table class="resp">
+        <tr>
+            <td><button name="nuevo" onclick="window.location='{{ path('insertClientes') }}'" />Nuevo</button></td>
+            {% if 'ROLE_ADMIN' in app.user.getRoles or 'ROLE_SUPER_ADMIN' in app.user.getRoles %}
+                <td><button id="borrar">Borrar</button></td>
+            {% endif %}
+            <td><button id="editar">Editar</button></td>
+            <td><button id="estado">Cambiar estado</button></td>
+            <td><button id="selectAll">Seleccionar todo</button></td>
+            <td><button onclick="window.open('{{ path('saldosClientes') }}')">Ver saldos</button></td>
+        </tr>
+    </table>
+</fieldset>
+            
+<fieldset>
+    <legend>Filtro</legend>
+    {{ form_start(form) }}
+    <table class="resp">
+        <tr>
+            <td>{{ form_widget(form.nombre, {'value': app.session.get('nombre')}) }}</td>
+            <td>{{ form_widget(form.razon_social, {'value': app.session.get('razonSocial')}) }}</td>
+            <td>{{ form_widget(form.isActive) }}</td>
+            {% if form.id_agencia is defined %}
+                <td>{{ form_widget(form.id_agencia) }}</td>
+            {% endif %}
+            <td>{{ form_widget(form.orden, {'value': app.session.get('clientes_orden')}) }}</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Ir</button>
+                <button type="reset" onclick="window.location='{{ path('showClientes', {page: 1, clear: 1}) }}'">Restablecer</button>
+            </td>
+        </tr>
+    </table>
+    {{ form_end(form) }}
+</fieldset>
+
+<div id="bigspace"></div><div id="bigspace"></div>
+
+<table class="resp" rules="rows" border="1" class="listado" bordercolor="#808080" frame="below" cellpadding="5px" name="table" style="width:100%">
+
+<form name="list00" id="myform" action="#">
+
+    <tr id="option"><td>#</td><td><input type="checkbox" name="Check_ctr" value="yes" onClick="checkAll(document.list00, this)"></td><td>Nombre</td><td>Apellido</td><td>Comercio</td><td id="option">Teléfono comercial</td><td id="option">Celular</td><td>Estado</td><td>Saldo</td></tr>
+        {% for item in pager.getResults %}
+            <tr id="list">
+                <td id="option">{{ loop.index }}</td>
+                <td><input type="checkbox" name="link[]" value2="{{ item.getNombre }}-{{ item.getApellido }}" value="{{ item.getIdCliente }}" id="{{ item.getIdCliente }}" class="tf"></td>
+                <td><a href="{{ path('showCliente', {'nombre': item.getIdCliente, 'nombre2': item.getNombre, '_format': 'html'}) }}" id="underlined">{{ item.getNombre }}</a></td>
+                <td><a href="{{ path('showCliente', {'nombre': item.getIdCliente, 'nombre2': item.getApellido, '_format': 'html'}) }}" id="underlined" >{{ item.getApellido }}</a></td>
+                <td>{{ item.getComercio }}</td>
+                <td id="option">{{ item.getTelefonoComercial }}</td>
+                <td id="option">{{ item.getCelular }}</td>
+                <td align="center">{% if item.getIsActive == 1 %}<img src="{{ asset('bundles/template/images/tick.png') }}" />{% else %}<img src="{{ asset('bundles/template/images/publish_x.png') }}" />{% endif %}</td>
+                <td>${{ item.getSaldo|number_format(2, ',', '.') }}</td>
+            </tr>
+        {% endfor %}
+</table>
+</form>
+
+<script>
+$(function() {
+    $( "#borrar" ).click(function() {
+        $( "#dialog-confirm" ).dialog( "open" );
+    });
+
+    $( "#dialog-confirm" ).dialog({
+        autoOpen: false,
+        resizable: false,
+        height:350,
+        modal: true,
+        buttons: {
+            Cancelar: function() {
+                $( this ).dialog( "close" );
+            },
+            "Aceptar": function() {
+                var ids;
+
+                ids = $('input[type=checkbox]:checked').map(function() {
+                    return $(this).attr('value');
+                }).get();
+                
+                if(ids.length > 0) {
+                    var route = "{{ path('deleteCliente', { 'id': "PLACEHOLDER" }) }}";
+                    window.location = route.replace("PLACEHOLDER", ids);
+                }
+                else {
+                    $( this ).dialog( "close" );
+                    $( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+$(function() {
+    $( "#estado" ).click(function() {
+        $( "#dialog-estado" ).dialog( "open" );
+    });
+
+    $( "#dialog-estado" ).dialog({
+        autoOpen: false,
+        resizable: false,
+        height:350,
+        modal: true,
+        buttons: {
+            Cancelar: function() {
+                $( this ).dialog( "close" );
+            },
+            "Aceptar": function() {
+                var ids;
+
+                ids = $('input[type=checkbox]:checked').map(function() {
+                    return $(this).attr('value');
+                }).get();
+                
+                if(ids.length > 0) {
+                    var route = "{{ path('cambiarEstado', { 'id': "PLACEHOLDER" }) }}";
+                    window.location = route.replace("PLACEHOLDER", ids);
+                }
+                else {
+                    $( this ).dialog( "close" );
+                    $( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+$('#editar').click(function() {
+    var ids;
+
+    ids = $('input[type=checkbox]:checked').map(function() {
+        return $(this).attr('value');
+    }).get();
+    
+    ids2 = $('input[type=checkbox]:checked').map(function() {
+        return $(this).attr('value2');
+    }).get();
+    
+    if(ids.length > 0) {
+        var route = "{{ path('showCliente', { 'nombre': "PLACEHOLDER", 'nombre2': "PLACEHOLDER2", '_format': 'html' }) }}";
+        window.location = route.replace("PLACEHOLDER", ids).replace("PLACEHOLDER2", ids2);
+    }
+    else {
+    	$( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+    }
+});
+</script>
+
+<div id="bigspace"></div>
+        
+<form name="clientescant" action="{{ path('showClientes') }}" method="POST">Mostrar: <input id="clientescant" name="clientescant" value="{{ app.session.get('clientescant') }}" size="1" maxlength="3"></form>
+
+<div id="dialog-confirm" title="¿ Está seguro ?">
+    <p>Si borra un cliente, también eliminará las ordenes de publicidad asociadas a él.<br><span style="font-weight: bold">¿ Está seguro ?</span></p>
+</div>
+
+<div id="dialog-estado" title="¿ Está seguro ?" >
+    <p>Si cambia el estado de un cliente, ya no podrá ser visto en otras partes del sistema.<br><span style="font-weight: bold">¿ Está seguro ?</span></p>
+</div>
+
+<div class="wrapper-pages">
+        {% if pager.isPaginable %}
+            {{ paginate(pager, 'showClientes') }}
+        {% endif %}
+</div>
+
+{% endblock %}

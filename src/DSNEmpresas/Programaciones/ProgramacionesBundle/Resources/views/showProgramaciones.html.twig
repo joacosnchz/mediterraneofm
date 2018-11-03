@@ -1,0 +1,46 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de programaciones{% endblock %}
+
+{% block entidad %}programaciones{% endblock %}
+
+{% block datos %}<td>Nombre</td><td>Emisora</td><td>Activa</td>{% endblock %}
+
+{% block datos_lista %}
+<td name="list00"><input type="checkbox" name="link[]" value2="{{ item.getNombre }}" value="{{ item.getId }}" id="{{ item.getNombre }}" class="tf"></td><td><a href="{{ path('showProgramacion', {'id': item.getId, 'nombre': item.getNombre|replace(' ', '-'), '_format': 'html'}) }}" id="underlined">{{ item.getNombre }}</a></td>
+<td>{{ item.getIdEmisora.getNombre }}</td>
+<td align="center">{% if item.getIsActive == 1 %}<img src="{{ asset('bundles/template/images/tick.png') }}" />{% else %}<img src="{{ asset('bundles/template/images/publish_x.png') }}" />{% endif %}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertProgramaciones') }}'" >Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="editar">Editar</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Programaciones" action="{{ path('showProgramaciones', {'page': 1}) }}" method="POST">
+    <input id="Programaciones" name="Programaciones" value="{{ app.session.get('Programaciones') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showProgramaciones') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteProgramacion', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showProgramacion', { 'id': "PLACEHOLDER", 'nombre': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

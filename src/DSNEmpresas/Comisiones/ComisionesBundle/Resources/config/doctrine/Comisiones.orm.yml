@@ -1,0 +1,15 @@
+DSNEmpresas\Comisiones\ComisionesBundle\Entity\Comisiones:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        descripcion:
+            type: string
+            length: '40'
+        valor:
+            type: float
+    lifecycleCallbacks: {  }

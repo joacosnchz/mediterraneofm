@@ -1,0 +1,7 @@
+parameters:
+#    programas.example.class: DSNEmpresas\Programas\ProgramasBundle\Example
+
+services:
+#    programas.example:
+#        class: %programas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,303 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}Cuenta corriente de agencias{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/template/js/phpjs.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/ctasctesagencias/js/insertLiqCustomJs.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+	{% for flashMessage in app.session.flashbag.get('notice') %}
+	    <div class="flash-notice"><div id="success">
+	        {{ flashMessage }}
+	    </div></div>
+	{% endfor %}
+        
+        {% if errors is defined %}
+            {% if errors %}
+                <div id="error">
+                    Posibles errores:
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endif %}
+
+	<form action="{{ path('insertCtasCtesAgencias') }}" method="post" {{ form_enctype(form) }} id="form" >
+		<table class="resp">
+			<tr><th colspan="2"><h3>Cuenta corriente de agencias</h3></th></tr>
+			<tr style="height:32px;">
+				<td>{{ form_label(form.fecha.fecha_desde) }}</td><td>{{ form_widget(form.fecha.fecha_desde) }}</td>
+			</tr>
+			<tr style="height:32px;">
+				<td>{{ form_label(form.fecha.fecha_hasta) }}</td><td>{{ form_widget(form.fecha.fecha_hasta) }}</td>
+			</tr>
+			<tr style="height:32px;">
+				<td>{{ form_label(form.idAgencia) }}</td><td>{{ form_widget(form.idAgencia) }}</td>
+			</tr>
+			<tr style="height:32px;">
+				<td>{{ form_label(form.param) }}</td><td>{{ form_widget(form.param) }}</td>
+			</tr>
+			<tr style="height:32px;">
+				<td>{{ form_label(form.docs) }}</td><td>{{ form_widget(form.docs) }}</td>
+			</tr>
+		</table>
+
+		<input type="submit" value="Aceptar" />
+		<input type="reset" value="Cancelar" />
+	</form>
+
+	<div style="height:16px;"></div><hr><div style="height:16px;"></div>
+
+	{% if ordenesp %}
+
+        <script>
+        $(function() {
+            $('#myform').submit(function(event) {
+                event.preventDefault;
+                window.str = '';
+                {% for key, value in valores.comision %}
+                    var key = $('#com{{ key }}').attr('value2');
+                    var value = $('#com{{ key }}').val();
+
+                    /* Cambio la coma por el punto, ya que de esta forma trabaja jQuery
+                     * a demas, nunca puede haber puntos ya que no es permitido
+                     */
+                    window.str = window.str + key + '-' + value.replace(',', '.') + ',';
+                    window.str = window.str.replace('undefined', '');
+                {% endfor %}
+            });
+        });
+        </script>
+
+	
+        <script>
+            function changeValues() {
+                $('#response').empty();
+                var ids;
+
+                ids = $('#elem:checked').map(function() {
+                    return $(this).attr('value');
+                }).get();
+
+                if(ids.length <= 0) {
+                    if($('#dialog-generar').dialog('isOpen')) {
+                        $('#mediterraneofm_mediterraneofmbundle_agenciasfiltertype_fecha_fecha_desde').datepicker('hide');
+                        $('#mediterraneofm_mediterraneofmbundle_agenciasfiltertype_fecha_fecha_desde').datepicker('destroy');
+                        $( '#dialog-generar' ).dialog( "close" );
+                        $( '#message' ).html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+                    }
+                }
+
+                var impors = $('#impo').val();
+                var impors = impors.split(',');
+                var impors = impors.filter(function(n){return n;});
+
+                var comis = window.str;
+                var comis = comis.split(',');
+                var comis = comis.filter(function(n){return n;});
+
+                var comisiones = '';
+                var importes = '';
+                var tot;
+
+                tot = 0;
+                for(i = 0;i < impors.length;i++) {
+                    var impor;
+                    impor = impors[i].split('-');
+                    var comi = comis[i].split('-');
+
+                    for(j = 0; j < ids.length; j++) {
+                        if(ids[j] == impor[1]) {
+                            var subtotalthis = $('#subt'+impor[1]).val();
+                            $('#response').last().append('<tr><td><input type="text" readonly size="5" value="' + impor[0] + '" id="mediterraneofm_mediterraneofmbundle_agenciasfiltertype_param_idOrdenpub' + impor[1] + '" /></td><td><input type="text" readonly size="5" value="' + phpjs.numberformat(comi[1], 2, ',', '.') + '"  id="mediterraneofm_mediterraneofmbundle_agenciasfiltertype_param_porcentaje' + impor[1] + '" /></td><td><input type="text" readonly size="8" value="' + subtotalthis + '" id="mediterraneofm_mediterraneofmbundle_agenciasfiltertype_param_importeBase' + impor[1] + '" name="mediterraneofm_mediterraneofmbundle_agenciasfiltertype_param_importeBase' + impor[1] + '"/></td></tr>');
+
+                            importes = importes + impor[1] + '-' + impor[2] + ',';
+
+                            var subTot = $('#subt'+ids[j]).val().replace('$', '');
+
+                            tot = tot + parseFloat(subTot.replace('.', '').replace(',', '.'));
+                        };
+
+                        if(ids[j] == comi[0]) {
+                            comisiones = comisiones + comi[0] + '-' + comi[1] + ',';
+                        }
+                    };
+
+                    var impor2 = impor.splice(1, 2);
+                    var impor2 = impor2.join('-');
+
+                    {# var importes = importes + impor2 + ','; #}
+                };
+
+                $('#mediterraneofm_mediterraneofmbundle_agenciasfiltertype_total').val(tot);
+                $('#comisiones').val(comisiones);
+                $('#importes').val(importes);
+            }
+            
+            $(function() {
+                phpjs = new phpjs();
+                $('#myform').submit(function(event) {
+                    event.preventDefault();
+                    var url = $('#myform').attr('action');
+                    var subt = $('#subto').val();
+                    var comi;
+
+                    comi = window.str;
+                    window.subTotales = '';
+
+                    $.post(url, {comision: comi, subtot: subt}, function(content) {
+                        {% for key, value in valores.comision %}
+                            var re = jQuery.parseJSON(content);
+                            var impors = $('#impo').val();
+                            var impor = $('#subt{{ key }}').attr('value2');
+                            var nuevimpors = impors.replace('{{ key }}-'+impor, '{{ key }}-'+re['importe'][{{ key }}]);
+                            $('#subt{{ key }}').val('$'+number_format(re['importe'][{{ key }}], 2, ',', '.'));
+                            $('.tot').html('$'+number_format(re['tot'], 2, ',', '.'));
+                            $('#impo').val(nuevimpors);
+                            {# no completo el total aca porque puede que no se seleccionen todas las ordenes a pagar
+                            $('#mediterraneofm_mediterraneofmbundle_agenciasfiltertype_total').val(number_format(re['tot'], 2, ',', '.')); #}
+                        {% endfor %}
+                        changeValues();
+                    });
+                });
+            });
+        </script>
+		<table class="resp">
+			<tr><td id="option">{{ 'now'|date('d-m-Y') }}</td><td id="option">|</td><td>Ordenes no cobradas en este periodo:</td><td id="required" class="whiteback">${{ valores2.subtot|number_format(2, ',', '.') }}</td></tr>
+		</table>
+
+		<div style="height:16px;"></div>
+
+		<div id="message"></div>
+
+		<form name="list00" id="myform" action="{{ path('calculate') }}">
+		<table class="resp" rules="rows" border="1" bordercolor="#808080" frame="below" cellpadding="5px">
+			<tr>
+                            <td>#</td>
+                            <td><input type="checkbox" name="Check_ctr" value="yes" onClick="checkAll(document.list00, this)"></td>
+                            <td>Fecha</td>
+                            <td>Nro. Orden</td>
+                            <td>Cliente</td>
+                            <td>B. sujeta a comisión</td>
+                            <td>Comisión %</td>
+                            <td>Importe</td>
+			</tr>
+			{% set subto = '' %}
+			{% set impo = '' %}
+			{% set comi = '' %}
+			{% for item in ordenesp %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td><input type="checkbox" name="link[]" value="{{ item.getIdOrdenPub }}" id="elem"></td>
+                                <td>{{ item.getFecha|date('d-m-Y') }}</td>
+                                <td><a href="{{ path('showOrdenPub', {nombre: item.getIdOrdenPub}) }}" id="underlined" target="_blank">OP/{{ item.getIdCliente.getIdAgencia }}-{{ item.getIdOrdenPub }}</a></td>
+                                <td>{{ item.getIdCliente.getComercio }}</td>
+                                <td align="center">${{ item.getTotal|number_format(2, ',', '.') }}</td>
+                                {% set subto = subto ~ item.getIdOrdenPub ~ '-' ~ item.getTotal ~ ',' %} {# genero str con todos los totales relacionados con los id_ordenpub #}
+                                <td align="center">
+                                    {% set com = '' %}
+                                    {# {{ attribute(valores.comision, item.getIdOrdenPub) }} #}
+                                    {% for key, value in valores.comision %}
+                                        {% if key == item.getIdOrdenPub %}
+                                            <input type="text" value2="{{ key }}" value="{{ value }}" id="com{{ key }}" size="3" onkeypress="return justNumbers(event);" />
+                                            {% set comi = comi ~ key ~ '-' ~ value ~ ',' %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td align="center">
+                                    {% for key, value in valores.importe %}
+                                        {% if key == item.getIdOrdenPub %}
+                                            <input type ='text' maxlenght='3' size="5" id="subt{{ key }}" value="${{ value|number_format(2, ',', '.') }}" value2="{{ value }}" readonly value3="{{ key }}" value4="{{ item.getNroOrdenPub }}"/>
+                                            {% set impo = impo ~ item.getNroOrdenPub ~ '-' ~ key ~ '-' ~ value ~ ',' %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+			{% endfor %}
+                        <tr>
+                            <td></td> {# numeracion #}
+                            <td></td> {# checkbox #}
+                            <td></td> {# fecha orden #}
+                            <td></td> {# nro orden #}
+                            <td>Total base:</td>
+                            <td id="required" align="center"><span class="whiteback">${{ valores.subtot|number_format(2, ',', '.') }}</span></td> 
+                            <td>Total liquidación:</td>
+                            <td id="required" align="center"><span class="whiteback tot">${{ valores.tot|number_format(2, ',', '.') }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><input type="hidden" value="{{ comi }}" id="comi" /></td>
+                            <td><input type="hidden" value="{{ impo }}" id="impo" /></td>
+                            {# Le doy a un input hidden el valor de todos los totales #}
+                            <td><input type="hidden" value="{{ subto }}" id="subto" /></td>
+                        </tr>
+		</table>
+                <div style="height: 10px;"></div>
+		<button id="generar" type="submit">Generar liquidacion</button>
+		<button id="act">Actualizar valores</button>
+		{# <button id="exportar" onclick="window.open('{{ path('createCCPdf', {'docs': docs|join(','), 'fecha_desde': fecha_desde|date('d-m-Y'), 'fecha_hasta': fecha_hasta|date('d-m-Y'), 'id_agencia': agencia, 'param': param|join(',')}) }}')" >Exportar a pdf</button> #}
+                {% if ordenesp2 %}
+                    <button id="nocobradas" onclick="window.open('{{ path('createNCPdf', {'ids_ord': ordenesp2|join(',')|url_encode(), 'fecha_desde': fecha_desde|date('d-m-Y'), 'fecha_hasta': fecha_hasta|date('d-m-Y') }) }}')">Ver ordenes no cobradas</button>
+                {% endif %}
+		</form>
+
+		<div id="dialog-generar" title="Confirme los datos">
+                    <form action="{{ path('newMov') }}" method="post" {{ form_enctype(form) }} id="insertMovimientoFrom">
+                        <table class="resp">
+                            <tr style="height:32px;">
+                                <td><label for="mediterraneofm_mediterraneofmbundle_agenciasfiltertype_fecha_fecha_desde">Fecha (*)</label></td><td>{{ form_widget(form2.fecha.fecha_desde, {attr:{value:'now'|date('d-m-Y')}}) }}</td>
+                            </tr>
+
+                            <tr style="height:32px;">
+                                <td>{{ form_label(form2.idAgencia) }}</td><td>{{ form_widget(form2.idAgencia) }}</td>
+                            </tr>
+
+                                <table colspan="7px" cellspacing="7px">
+                                    <thead>
+                                    <tr><td>Nro. orden</td><td>Comisión %</td><td>Importe</td></tr>
+                                    </thead>
+                                    <tbody id="response">
+
+                                    </tbody>
+                                </table>
+
+                            <tr>
+                                <td><input type="hidden" name="comisiones" id="comisiones" /></td>
+                            </tr>
+
+                            <tr>
+                                <td><input type="hidden" name="importes" id="importes" /></td>
+                            </tr>
+
+                            <tr style="height:32px;">
+                                <td>{{ form_label(form2.total) }}</td><td>{{ form_widget(form2.total) }}</td>
+                            </tr>
+                        </table>
+
+                        <table class="resp">
+                            <tr>
+                                <td><input type="submit" value="Aceptar" id="insertMovSubmit" /></td>
+                                <td><input type="reset" value="Cancelar" id="cl" /></td>
+                            </tr>
+                        </table>
+                    </form>
+		</div>
+        {% else %}
+            {% if ordenesp2 is defined %}
+                {% if ordenesp2 %}
+                    <table class="resp">
+                            <tr><td id="option">{{ 'now'|date('d-m-Y') }}</td><td id="option">|</td><td>Ordenes no cobradas en este periodo:</td><td id="required" class="whiteback">${{ valores2.subtot|number_format(2, ',', '.') }}</td></tr>
+                    </table>
+                    <p>
+                        <div id="success">No hay ordenes a liquidar</div>
+                    </p>
+                    <button id="nocobradas" onclick="window.open('{{ path('createNCPdf', {'ids_ord': ordenesp2|join(',')|url_encode(), 'fecha_desde': fecha_desde|date('d-m-Y'), 'fecha_hasta': fecha_hasta|date('d-m-Y') }) }}')">Ver ordenes no cobradas</button>
+                {% endif %}
+            {% endif %}
+	{% endif %}
+
+{% endblock %}

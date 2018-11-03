@@ -1,0 +1,50 @@
+{% block js %}
+    <script src="{{ asset('bundles/grillas/js/bundleCustomJs.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="option">
+    <div id="accordion">
+        {% if grillas is defined %}<h3>Grillas de programacion</h3>{% endif %}
+        <div>
+            <p>
+                <div id="tabs">
+                    {% if grillas is defined %}
+                        <ul style="list-style: none">
+                            {% for item in grillas.emisoras %}
+                                <li><a href="#tabs-{{ item.getIdEmisora }}" style="text-decoration: none; color: #000">{{ item.getNombre }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% for item in grillas.emisoras %}
+                          <div id="tabs-{{ item.getIdEmisora }}">
+                            <table cellpadding="5" cellspacing="5" style="color:#000" border="1">
+                                {% for item2 in grillas.programaciones %}
+                                    {% if item2.getIdEmisora.getIdEmisora == item.getIdEmisora %}
+                                        <tr><td>{{ item2.getNombre }}</td></tr>
+                                        <tr><td>Hora</td><td>Programa</td>{% for item2 in grillas.tiposmenciones %}<td>{{ item2.getNroMenciones }}</td>{% endfor %}</tr>
+                                        {% for item3 in grillas.programas %}
+                                            {% if item3.getIdProgramacion.getId == item2.getId %}
+                                                <tr>
+                                                    <td>{{ item3.getDuracionDesde|date('H:i:s') }}</td>
+                                                    <td>{{ item3.getNombre }}</td>
+                                                    {% for item5 in grillas.tiposmenciones %}
+                                                        {% set mencion = attribute(grillas.salidas, item3.getIdPrograma) %}
+                                                        <td>{{ attribute(mencion, item5.getNroMenciones) }}</td>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </table>
+                          </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

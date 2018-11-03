@@ -1,0 +1,91 @@
+DSNEmpresas\Responsables\ResponsablesBundle\Entity\Responsables:
+    type: entity
+    table: Responsables
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        nombre:
+            type: string
+            length: 35
+            fixed: false
+            nullable: false
+        apellido:
+            type: string
+            length: 35
+            fixed: false
+            nullable: false
+        direccion:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+        telefono_particular:
+            type: string
+            length: 17
+            fixed: false
+            nullable: true
+            column: telefono_particular
+        telefono_comercial:
+            type: string
+            length: 17
+            fixed: false
+            nullable: false
+            column: telefono_comercial
+        celular:
+            type: string
+            length: 15
+            fixed: false
+            nullable: true
+        email:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        salt:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        isActive:
+            type: boolean
+            nullable: false
+        username:
+            type: string
+            length: 35
+            fixed: false
+            nullable: false
+            unique: true
+        password:
+            type: string
+            length: 35
+            fixed: false
+            nullable: true
+        roles:
+            type: string
+            length: 16
+            fixed: false
+            nullable: false
+        isLogged:
+            type: boolean
+            nullable: false
+            column: is_logged
+        loggedTime:
+            type: datetime
+            nullable: true
+            column: logged_time
+    manyToOne:
+        id_agencia:
+            targetEntity: DSNEmpresas\Agencias\AgenciasBundle\Entity\Agencias
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id_agencia:
+                    referencedColumnName: id_agencia
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

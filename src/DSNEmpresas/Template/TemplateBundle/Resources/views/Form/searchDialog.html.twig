@@ -1,0 +1,6 @@
+<table>
+	<tr><td>{{ form_widget(form.property) }}</td></tr>
+	<tr><td>{{ form_widget(form.search, {attr: {'placeholder': 'search'|trans({}, 'domain') } }) }}<button id="buscar">{{ 'search'|trans({}, 'domain')  }}</button></td></tr>
+</table>
+
+<div id="response"></div>

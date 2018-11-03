@@ -1,0 +1,119 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de programas{% endblock %}
+
+{% block entidad %}programas{% endblock %}
+
+{% block filtro %}
+<script src="{{ asset('bundles/template/js/timepicker/jquery.timepicker.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/template/css/timepicker/jquery.timepicker.css') }}" />
+<script src="{{ asset('bundles/programas/js/showCustomJs.js') }}" type="text/javascript"></script>
+
+{% if app.session.get('nombre') %}
+    {% set nombre = app.session.get('nombre') %}
+{% else %}
+    {% set nombre = null %}
+{% endif %}
+{% if app.session.get('duracion_desde') %}
+    {% set duracion_desde = app.session.get('duracion_desde')|date('g:ia') %}
+{% else %}
+    {% set duracion_desde = null %}
+{% endif %}
+{% if app.session.get('duracion_hasta') %}
+    {% set duracion_hasta = app.session.get('duracion_hasta')|date('g:ia') %}
+{% else %}
+    {% set duracion_hasta = null %}
+{% endif %}
+{% if app.session.get('emisora') %}
+    {% set emisora = app.session.get('emisora') %}
+{% else %}
+    {% set emisora = null %}
+{% endif %}
+{% if app.session.get('programacion') %}
+    {% set programacion = app.session.get('programacion') %}
+{% else %}
+    {% set programacion = null %}
+{% endif %}
+
+<div id="message"></div>
+
+<fieldset>
+	<legend>Filtro</legend>
+	<form action="{{ path('showProgramas') }}" method="post" {{ form_enctype(form) }} id="form1">
+	<table class="resp">
+            <tr>
+                {# utilizamos form_widget en nombre para que no muestre
+                        error de NotBlank cuando no se completa
+                        ya que en este caso no es obligatorio el campo. #}
+                <td>{{ form_widget(form.nombre, {'value': nombre }) }}</td>
+
+                <form id="form2">
+                    <td>{{ form_widget(form.id_programacion.nombre) }}</td> {# Este campo es emisora #}
+                    <td>{{ form_widget(form.id_programacion.programacion, {'value': app.session.get('programacion')}) }}</td>
+                    <td>
+                        <select id="response" title="Seleccione emisora para ver programaciones">
+                            <option value="null">Seleccione programacion</option>
+                        </select>
+                    </td>
+                </form>
+            </tr>
+	</table>
+
+	<table class="resp">
+            <tr>
+                {# utilizamos form_widget en las duraciones para que no muestre
+                        error de NotBlank cuando no se completa
+                        ya que en este caso no es obligatorio el campo. #}
+                <td>{{ form_widget(form.duracion_desde, {'value': duracion_desde }) }}</td>
+                <td>{{ form_widget(form.duracion_hasta, {'value': duracion_hasta }) }}</td>
+                <td>&nbsp;</td>
+                <td><input type="submit" value="Ir"/></td>
+                <td><input type="button" value="Restablecer" onclick='window.location="{{ path('showProgramas', {cl: true}) }}"'/></td>
+            </tr>
+	</table>
+	</form>
+</fieldset>
+{% endblock %}
+
+{% block datos %}<td>Nombre</td><td>Programacion</td><td>Desde las</td><td>Hasta las</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value2="{{ item.getNombre }}" value="{{ item.getIdPrograma }}" id="{{ item.getIdPrograma }}" class="tf"></td>
+<td><a id="underlined" href="{{ path('showPrograma', {'id': item.getIdPrograma, 'nombre': item.getNombre|replace({' ': '-'}), '_format': 'html'}) }}">{{ item.getNombre }}</a></td>
+<td id="option">{{ item.getIdProgramacion.getNombre }}</td>
+<td><span id="onlyresp">Desde&nbsp;</span>{{ item.getDuracionDesde|date('g:ia') }}</td>
+<td> <span id="onlyresp">Hasta&nbsp;</span>{{ item.getDuracionHasta|date('g:ia') }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertProgramas') }}'" />Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="editar">Editar</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Programas" action="{{ path('showProgramas', {'page': 1}) }}" method="POST">
+    <input id="Programas" name="Programas" value="{{ app.session.get('Programas') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showProgramas') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deletePrograma', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showPrograma', { 'id': "PLACEHOLDER", 'nombre': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

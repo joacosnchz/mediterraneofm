@@ -1,0 +1,75 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block js %}
+<script src="{{ asset('bundles/template/js/jquery-1.8.3.js') }}"></script>
+<script src="{{ asset('bundles/template/js/jquery-ui-1.9.2.custom.js') }}"></script>
+<script>
+$(function() {
+$( "#mediterraneofm_mediterraneofmbundle_insertfacturastype_fecha" ).datepicker({ dateFormat: "dd-mm-yy" });
+});
+</script>
+<script>
+$(function() {
+$( document ).tooltip();
+});
+</script>
+
+<script type="text/javascript">
+    // keep track of how many email fields have been rendered
+    var emailCount = '{{ form.descripcion | length }}';
+
+    jQuery(document).ready(function() {
+        jQuery('#agregar-desc').click(function() {
+            var emailList = jQuery('#descripcion-list');
+
+            // grab the prototype template
+            var newWidget = emailList.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, emailCount);
+            emailCount++;
+
+            // create a new list element and add it to the list
+            var newLi = jQuery('<li></li>').html(newWidget);
+            newLi.appendTo(jQuery('#descripcion-list'));
+
+            return false;
+        });
+    })
+</script>
+{% endblock %}
+
+{% block title %}Generar nueva factura{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('insertFacturas') }}" method="post" {{ form_enctype(form) }}>
+
+    <table class="resp">
+        <tr><th colspan="2"><h3>Generar nueva factura</h3></th></tr>
+        {% for form in form %}
+        <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+                {% endfor %}
+        {# <tr><td>{{ form_label(form.n_factura) }}</td><td>{{ form_widget(form.n_factura) }}</td></tr> #}
+    </table>
+    
+    {# <ul id="descripcion-list" data-prototype="{{ form_widget(form.descripcion.vars.prototype) | e }}">
+    {% for desc in form.descripcion %}
+        <li>
+            {{ form_errors(desc) }}
+            {{ form_widget(desc) }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="#" id="agregar-desc">Agregar</a> #}
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="reset" value="cancelar"/>
+</form>
+
+{% endblock %}

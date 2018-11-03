@@ -1,0 +1,27 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}{{ factura.getNFactura }}{% endblock %}
+
+{% block content %}
+
+<table class="resp" border="1" cellpadding="5px">
+    <tr><td>N° Factura: </td><td>{{ factura.getNFactura }}</td></tr>
+    <tr><td>Tipo de factura: </td><td>{{ factura.getTipoFactura }}</td></tr>
+    <tr><td>Fecha: </td><td>{{ factura.getFecha|date('d-m-Y') }}</td></tr>
+    <tr><td>Nombre: </td><td>{{ factura.getNombre }}</td></tr>
+    <tr><td>Domicilio: </td><td>{{ factura.getDomicilio }}</td></tr>
+    <tr><td>Ciudad: </td><td>{% render 'MediterraneoFMBundle:Transform:TransformIdToName' with {'idArray': factura.getIdCiudad, 'Entity': 'Ciudades' } %}</td></tr>
+    <tr><td>Cuit: </td><td>{{ factura.getCuit }}</td></tr>
+    <tr><td>N° remito: </td><td>{{ factura.getRemitoN }}</td></tr>
+    <tr><td>Iva: </td><td>{{ factura.getIva }}</td></tr>
+    <tr><td>Condición de vta.: </td><td>{{ factura.getCondicionVenta }}</td></tr>
+    <tr><td>Candidad/es: </td><td>{{ factura.getCantidad }}</td></tr>
+    <tr><td>Descripcion/es: </td><td>{{ factura.getDescripcion }}</td></tr>
+    <tr><td>Precio/s unitario/s: </td><td>{{ factura.getPUnitario }}</td></tr>
+    <tr><td>Precio/s sub-total/es: </td><td>{{ factura.getPTotal }}</td></tr>
+    <tr><td>Total: </td><td>{{ factura.getTotal }}</td></tr>
+</table>
+
+<input type="button" name="back" value="Volver" onclick="window.location='{{ path('showFacturas') }}'" />
+
+{% endblock %}

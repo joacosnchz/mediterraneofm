@@ -1,0 +1,7 @@
+parameters:
+#    system_log.example.class: DSNEmpresas\System\SystemLogBundle\Example
+
+services:
+#    system_log.example:
+#        class: %system_log.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

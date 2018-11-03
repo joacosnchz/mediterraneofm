@@ -1,0 +1,14 @@
+insertComisiones:
+    pattern:  /admin/comisiones/new
+    defaults: { _controller: ComisionesBundle:Comisiones:insert }
+showComisiones:
+    pattern:  /admin/comisiones/show/{page}
+    defaults: { _controller: ComisionesBundle:Comisiones:show, page: 1 }
+deleteComisiones:
+    pattern:  /admin/comisiones/delete/{id}
+    defaults: { _controller: ComisionesBundle:Comisiones:delete }
+showComision:
+    pattern:  /admin/comision/show/{id}/{nombre}.{_format}
+    defaults: { _controller: ComisionesBundle:Comisiones:showOne }
+    requirements:
+        '_format': html

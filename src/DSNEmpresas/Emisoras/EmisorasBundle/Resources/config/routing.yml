@@ -1,0 +1,24 @@
+showEmisora:
+  pattern : /admin/e/{nombre}/{nombre2}.{_format}
+  defaults: { _controller: EmisorasBundle:Emisoras:showOne }
+  requirements:
+      _format:  html
+insertEmisoras:
+  pattern : /admin/emisoras/new
+  defaults: { _controller: EmisorasBundle:Emisoras:insert }
+  requirements:
+        _method:  GET
+insertEmisorasSuccess:
+  pattern : /admin/emisoras/new
+  defaults: { _controller: EmisorasBundle:Emisoras:insertSuccess }
+  requirements:
+        _method:  POST
+#showEmisoras:
+  #pattern : /admin/emisoras/show/{page}
+  #defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'Emisoras' }
+showEmisoras:
+  pattern : /admin/emisoras/show/{page}
+  defaults: { _controller: EmisorasBundle:Emisoras:show, page: 1 }
+deleteEmisora:
+  pattern: /admin/emisora/delete/{id}
+  defaults: { _controller: EmisorasBundle:Emisoras:delete }

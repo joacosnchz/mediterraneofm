@@ -1,0 +1,14 @@
+insertTiposDocumentos:
+    pattern:  /admin/tiposdocumentos/new
+    defaults: { _controller: TiposDocumentosBundle:TiposDocumentos:insert }
+showTipoDocumento:
+    pattern:  /admin/td/show/{id}.{_format}
+    defaults: { _controller: TiposDocumentosBundle:TiposDocumentos:showOne }
+    requirements:
+        _format: 'html'
+showTiposDocumentos:
+    pattern:  /admin/tiposdocumentos/show/{page}
+    defaults: { _controller: TiposDocumentosBundle:TiposDocumentos:show, page: 1 }
+deleteTipoDocumento:
+    pattern:  /admin/tipodocumento/delete/{id}
+    defaults: { _controller: TiposDocumentosBundle:TiposDocumentos:delete }

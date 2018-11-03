@@ -1,0 +1,10 @@
+parameters:
+    template.form.type.class: DSNEmpresas\Template\TemplateBundle\Form\Type\SearchEntityFieldType
+
+services:
+    template.form.type.searchEntity:
+        class: %template.form.type.class%
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: form.type, alias: searchEntity }

@@ -1,0 +1,92 @@
+{% block content %}
+<table class="resp" style="color: #000">
+<th>Detalles del pago:</th>
+
+{# <script>
+$(function() {
+    $( '#sub2' ).click(function(event) {
+            event.preventDefault();
+
+            if ($( '#mediterraneofm_mediterraneofmbundle_movctacteclientetype_haber' ).val() > param) {
+                alert('Generar nota de credito');
+            }
+
+            if ($( '#mediterraneofm_mediterraneofmbundle_movctacteclientetype_haber' ).val() < param) {
+                alert('Generar nueva orden con la diferencia');
+            }
+    });    
+});
+</script> #}
+
+<script>
+$(function() {
+   $('#cl').click(function() {
+        $( "#formI" ).dialog( "close" );
+   });
+});
+</script>
+
+
+<form action="{{ path('insertCtaCte', {'id_cliente': id_cliente, 'fecha_desde': fecha_desde|date('d-m-Y'), 'fecha_hasta': fecha_hasta|date('d-m-Y') }) }}" method="post" {{ form_enctype(form) }} id="form1">
+        <tr style="height:32px;">
+            <td>{{ form_label(form.fecha) }}</td><td>{{ form_widget(form.fecha) }}</td>
+        </tr>
+            
+        <tr style="height:32px;">
+            <td>{{ form_label(form.idCliente) }}</td><td>{{ form_widget(form.idCliente) }}</td>
+        </tr>
+        
+        <tr style="height:32px;">
+            <td>{{ form_label(form.idTipoDocumento) }}</td><td>{{ form_widget(form.idTipoDocumento) }}</td>
+        </tr>
+
+        <script>
+            function subm() {
+                var url = $("#form1").attr("action");
+                var id_tipodoc = $('#mediterraneofm_mediterraneofmbundle_movctacteclientetype_idTipoDocumento').val();
+
+                $.post(url, {'id_tipodoc': id_tipodoc}).done(function(content) {
+                    $('#mediterraneofm_mediterraneofmbundle_movctacteclientetype_concepto').val(content);
+                });             
+            };
+        </script>
+
+        <script>
+        $(function() {
+            $('#mediterraneofm_mediterraneofmbundle_movctacteclientetype_idTipoDocumento').live('keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+
+                if(keyCode == 9) {
+                    subm();
+                }
+            });
+
+            $('#mediterraneofm_mediterraneofmbundle_movctacteclientetype_idTipoDocumento').live('change', function() {
+                subm();
+            });
+        });
+        </script>
+
+        <tr style="height:32px;">
+            <td>{{ form_label(form.concepto) }}</td><td>{{ form_widget(form.concepto) }}</td>
+        <tr>
+        <tr style="height:32px;">
+            <td>{{ form_label(form.haber) }}</td><td>{{ form_widget(form.haber) }}</td>
+        <tr>
+        <tr><td><input type="hidden" name="hidden" value="1" /></td></tr>
+        <tr>
+            <td>Docs. seleccionados</td>
+            {# este hidden guarda los id de ordenes seleccionados #}
+            <td><input type="text" id="docs2" readonly><input type="hidden" name="hidden2" id="docs"></td>
+        </tr>
+    </table>
+    
+    <hr>
+    
+    <span style="color: #000">Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br></span>
+    <input type="submit" value="aceptar" id="sub2" />
+    <input type="button" id="cl" value="cancelar" />
+
+</form>
+
+{% endblock %}

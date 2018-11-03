@@ -1,0 +1,48 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de emisoras{% endblock %}
+
+{% block entidad %}emisoras{% endblock %}
+
+{% block datos %}<td>Nombre</td><td>Dirección</td><td>Teléfono</td><td>Localidad</td>{% endblock %}
+
+{% block datos_lista %}
+<td name="list00"><input type="checkbox" name="link[]" value2="{{ item.getNombre }}" value="{{ item.getIdEmisora }}" id="{{ item.getNombre }}" class="tf"></td>
+<td><a href="{{ path('showEmisora', {'nombre': item.getIdEmisora, 'nombre2': item.getNombre, '_format': 'html'}) }}" id="underlined">{{ item.getNombre }}</a></td>
+<td id="option">{{ item.getDireccion }}</td>
+<td id="option">{{ item.getTelefonoComercial }}</td>
+<td>{{ item.getIdCiudad.getNombre }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertEmisoras') }}'" >Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="editar">Editar</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar:
+<form name="Emisoras" action="{{ path('showEmisoras', {'page': 1}) }}" method="POST">
+    <input id="Emisoras" name="Emisoras" value="{{ app.session.get('Emisoras') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showEmisoras') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteEmisora', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showEmisora', { 'nombre': "PLACEHOLDER", 'nombre2': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

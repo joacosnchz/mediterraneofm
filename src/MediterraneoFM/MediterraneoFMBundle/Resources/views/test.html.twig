@@ -1,0 +1,58 @@
+{# <script src="{{ asset('bundles/template/js/jquery-1.8.3.js') }}"></script>
+<script src="{{ asset('bundles/template/js/jquery-ui-1.9.2.custom.js') }}"></script>
+<link href="{{ asset('bundles/template/css/global.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('bundles/template/css/jquery-ui-1.9.2.custom.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/template/css/jquery-ui-1.9.2.custom.min.css') }}" rel="stylesheet" />
+<script>
+    $(function() {
+       $('#box').draggable({
+           drag: function(event, ui) {
+               $('#xpos').val(ui.position.left);
+               $('#ypos').val(ui.position.top);
+           }
+       });
+       
+       $('#xpos').val($('#box').position().left);
+       $('#ypos').val($('#box').position().top);
+    });
+</script> #}
+<html>
+<head>
+<title>Codigo de barras</title>
+</head>
+<body>
+    <fieldset>
+        <legend>Crear codigo</legend>
+        <table>
+        {{ form_start(form) }}
+        {% for campo in form %}
+            <tr><td>{{ form_label(campo) }}</td><td>{{ form_widget(campo) }}</td></tr>
+        {% endfor %}
+        {{ form_end(form) }}
+        </table>
+    </fieldset>
+    
+    <br>Codigo de barras:<br><br>
+    <div class="cod" style="position: absolute">
+    {% if codigo is defined %}
+        {{ codigo|raw }}
+        {% if codtxt is defined %}
+            <div style="text-align:center;">{{ codtxt }}</div>
+        {% endif %}
+    {% else %}
+        Por favor, complete el formulario para generar un codigo de barras.
+    {% endif %}
+    </div>
+</body>
+</html>
+
+{# <div class="pos">
+    X: <input type="text" id="xpos"><br>
+    Y: <input type="text" id="ypos">
+</div>
+
+<div id="box" style="border:1px solid #000; position:absolute; top:406px; left: 483px; padding:5px">
+    <p>
+        box
+    </p>
+</div> #}

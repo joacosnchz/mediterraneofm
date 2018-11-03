@@ -1,0 +1,36 @@
+DSNEmpresas\System\SystemLogBundle\Entity\SystemLog:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        fechaHora:
+            type: datetime
+        descripcion:
+            type: string
+            length: '50'
+    manyToOne:
+        idResponsable:
+            targetEntity: DSNEmpresas\Responsables\ResponsablesBundle\Entity\Responsables
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idResponsable:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+        idType:
+            targetEntity: DSNEmpresas\System\SystemLogBundle\Entity\LogTypes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idType:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

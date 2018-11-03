@@ -1,0 +1,15 @@
+insertFacturas:
+  pattern : /admin/facturas/new
+  defaults: { _controller: FacturasBundle:Facturas:insert }
+#showFacturas:
+  #pattern : /admin/facturas/show/{page}
+  #defaults: { _controller: ListadosBundle:Listados:showListado, page: 1, 'entidad': 'Facturas' }
+showFacturas:
+  pattern : /admin/facturas/show/{page}
+  defaults: { _controller: FacturasBundle:Facturas:show, page: 1 }
+showFactura:
+  pattern : /admin/f/{nombre}.html
+  defaults: { _controller: FacturasBundle:Facturas:showOne }
+deleteFactura:
+  pattern: /admin/facturas/delete/{id}
+  defaults: { _controller: FacturasBundle:Facturas:delete }

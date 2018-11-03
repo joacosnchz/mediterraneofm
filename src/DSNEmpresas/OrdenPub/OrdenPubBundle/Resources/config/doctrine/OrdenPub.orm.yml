@@ -1,0 +1,66 @@
+DSNEmpresas\OrdenPub\OrdenPubBundle\Entity\OrdenPub:
+    type: entity
+    table: OrdenPub
+    fields:
+        id_ordenpub:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            column: id_ordenpub
+            generator:
+                strategy: IDENTITY
+        nro_ordenpub:
+            type: string
+            length: 11
+            nullable: true
+            column: nro_ordenpub
+        fecha:
+            type: date
+            nullable: false
+            column: fecha
+        texto_publicidad:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: texto_publicidad
+        observaciones:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        total:
+            type: float
+            unsigned: false
+            nullable: true
+        estado:
+            type: integer
+            unsigned: false
+            nullable: false
+        pagado:
+            type: boolean
+            nullable: false
+        liquidado:
+            type: boolean
+            nullable: false
+    manyToOne:
+        id_agencia:
+            targetEntity: DSNEmpresas\Agencias\AgenciasBundle\Entity\Agencias
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id_agencia:
+                    referencedColumnName: id_agencia
+            orphanRemoval: false
+        idCliente:
+            targetEntity: DSNEmpresas\Clientes\ClientesBundle\Entity\Clientes
+            joinColumns:
+                idCliente:
+                    referencedColumnName: id_cliente
+    oneToMany:
+        pautas:
+            targetEntity: OrdenTarifas
+            mappedBy: id_ordenpub
+    lifecycleCallbacks: {  }

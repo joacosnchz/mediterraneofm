@@ -1,0 +1,7 @@
+parameters:
+#    pautas.example.class: DSNEmpresas\Pautas\PautasBundle\Example
+
+services:
+#    pautas.example:
+#        class: %pautas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,47 @@
+<html>
+    <head>
+       <meta http-equiv="Content-Type" content="application/pdf; charset=utf-8" />
+       <title>Impresión</title>
+    </head>
+    <body>
+        <table width="100%">
+            <tr>
+                <td>
+                    <h1>Saldos de Clientes</h1>
+                </td>
+            </tr>
+            <tr>
+                {% if membrete %}
+                    <td align="center"><img src="{{ web_dir }}{{ asset('bundles/template/images/agencias/') }}{{ membrete }}" alt="membrete" /></td>
+                {% endif %}
+            </tr>
+        </table>
+            
+        <div style="height: 30px"></div>
+
+    	<table width="100%" rules="rows" border="1" bordercolor="#808080" frame="below" cellpadding="5">
+    		<tr style="font-weight:bold">
+    			<td>#</td>
+    			<td>Cliente</td>
+    			<td>Saldo</td>
+    			<td>Teléfono</td>
+    			<td>Dirección</td>
+    			<td>Ciudad</td>
+    		</tr>
+	    	{% for cliente in clientes %}
+				{% if (loop.index % 2) == 0 %}
+                    <tr style="background-color: #EAE3E3">
+                {% else %}
+                    <tr>
+                {% endif %}
+					<td>{{ loop.index }}</td>
+					<td>{{ cliente.getComercio }}</td>
+					<td>${{ cliente.getSaldo|number_format(2, ',', '.') }}</td>
+                    <td>{{ cliente.getTelefonoComercial }} / {{ cliente.getTelefonoParticular }}</td>
+                    <td>{{ cliente.getDireccion }}</td>
+                    <td>{{ cliente.getIdAgencia.getIdCiudad.getNombre }}</td>
+				</tr>
+	    	{% endfor %}
+    	</table>
+    </body>
+</html>

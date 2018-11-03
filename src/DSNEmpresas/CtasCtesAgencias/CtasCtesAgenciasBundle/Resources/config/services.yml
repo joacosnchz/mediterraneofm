@@ -1,0 +1,7 @@
+parameters:
+#    ctas_ctes_agencias.example.class: DSNEmpresas\CtasCtesAgencias\CtasCtesAgenciasBundle\Example
+
+services:
+#    ctas_ctes_agencias.example:
+#        class: %ctas_ctes_agencias.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

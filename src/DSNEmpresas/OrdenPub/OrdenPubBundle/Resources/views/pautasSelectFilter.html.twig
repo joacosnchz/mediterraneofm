@@ -1,0 +1,8 @@
+{% if pautas %}
+    <option value="null">Seleccione pauta</option>
+    {% for pauta in pautas %}
+        <option value="{{ pauta.getIdCostoTarifas }}">{{ pauta.getIdTipoMencion.getNroMenciones }} menciones de {{ pauta.getDuracion }} segundos por {{ pauta.getCosto|number_format(2, ',', '.') }}</option>
+    {% endfor %}
+{% else %}
+    <option value="null">No hay pautas definidas para esta tarifa</option>
+{% endif %}

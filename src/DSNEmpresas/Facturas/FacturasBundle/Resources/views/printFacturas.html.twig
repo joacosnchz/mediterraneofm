@@ -1,0 +1,63 @@
+<title>{% block title %} Impresión {% endblock %}</title>
+
+{% block content %}
+<SCRIPT>
+function printPage(){
+document.getElementById('print').style.display='none';
+document.getElementById('volver').style.display='none';
+window.print();
+document.getElementById('print').style.display='block';
+document.getElementById('volver').style.display='block';
+window.location='{{ path('insertFacturas') }}';
+}
+</SCRIPT>
+
+    <input type="button" name="imprimir" value="Imprimir" onclick="printPage()" id="print">
+    <input type="button" name="imprimir" value="Volver" onclick="window.location='{{ path('insertFacturas') }}';" id="volver">
+    
+    <table style="width:100%">
+        <tr>
+            <td align="right"><img src="{{ asset('bundles/template/images/logo000.png') }}" alt="radio10" /></td>
+            <td align="center"><img src="{{ asset('bundles/template/images/logo001.png') }}" alt="la100" /></td>
+            <td align="left"><img src="{{ asset('bundles/template/images/logo002.png') }}" alt="mitre" /></td>
+        </tr>
+    </table>
+    
+    <div style="height: 10px;"></div>
+
+    <div style="border:1px solid #000">
+    
+
+    <table>
+        <tr><th colspan="2">Datos de la factura</th></tr>
+        <tr><td>Nro. factura</td><td>{{ data.nFactura }}</td></tr>
+        <tr><td>Tipo de factura</td><td>{{ data.TipoFactura }}</td></tr>
+        <tr><td>Nombre</td><td>{{ data.nombre }}</td></tr>
+        <tr><td>Domicilio</td><td>{{ data.domicilio }}</td></tr>
+        <tr><td>Localidad</td><td>{{  data.getIdCiudad.getNombre }}</td></tr>
+        <tr><td>Cuit</td><td>{{ data.cuit }}</td></tr>
+        <tr><td>N° remito</td><td>{{ data.remiton }}</td></tr>
+        <tr><td>Iva</td><td>{{ data.iva }}</td></tr>
+        <tr><td>Condición de venta</td><td>{{ data.condicionventa }}</td></tr>
+        <tr><td>Cantidad</td><td>Descripcion</td><td>Precio unitario</td><td>Precio total</td></tr>
+        <tr><td>
+            {% for cant in cantarray %}
+                {{ cant }}<br>
+            {% endfor %}
+        </td><td>
+            {% for desc in descarray %}
+                {{ desc }}<br>
+            {% endfor %}
+        </td><td>
+            {% for pu in puarray %}
+                {{ pu }}<br>
+            {% endfor %}
+        </td><td>
+            {% for pt in ptarray %}
+                {{ pt }}<br>
+            {% endfor %}
+        </td></tr>
+        <tr><td>Total</td><td>{{ data.total }}</td></tr>
+    </table>
+
+{% endblock %}

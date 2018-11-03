@@ -1,0 +1,7 @@
+parameters:
+    validation.default.controller: DSNEmpresas\Validation\ValidationBundle\Controller\DefaultController
+
+services:
+    custom.validation:
+        class: %validation.default.controller%
+        arguments: [@service_container]

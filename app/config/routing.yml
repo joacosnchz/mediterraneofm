@@ -1,0 +1,116 @@
+system_log:
+    resource: "@SystemLogBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ciudades:
+    resource: "@CiudadesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+validation:
+    resource: "@ValidationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+mods_generator:
+    resource: "@ModsGeneratorBundle/Resources/config/routing.yml"
+    prefix:   /
+
+comisiones:
+    resource: "@ComisionesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tipos_menciones:
+    resource: "@TiposMencionesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ctas_ctes_agencias:
+    resource: "@CtasCtesAgenciasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+programaciones:
+    resource: "@ProgramacionesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+grillas:
+    resource: "@GrillasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+listados:
+    resource: "@ListadosBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ctas_ctes_clientes:
+    resource: "@CtasCtesClientesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+facturas:
+    resource: "@FacturasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+recibos:
+    resource: "@RecibosBundle/Resources/config/routing.yml"
+    prefix:   /
+
+programas:
+    resource: "@ProgramasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+agencias:
+    resource: "@AgenciasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pautas:
+    resource: "@PautasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+clientes:
+    resource: "@ClientesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+responsables:
+    resource: "@ResponsablesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tarifas:
+    resource: "@TarifasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+emisoras:
+    resource: "@EmisorasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+orden_pub:
+    resource: "@OrdenPubBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tipos_documentos:
+    resource: "@TiposDocumentosBundle/Resources/config/routing.yml"
+    prefix:   /
+
+mediterraneo_fm:
+    resource: "@MediterraneoFMBundle/Resources/config/routing.yml"
+    prefix:   /
+
+template:
+    resource: "@TemplateBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+# app/config/routing.yml
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+

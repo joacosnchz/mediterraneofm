@@ -1,0 +1,15 @@
+insertPautas:
+  pattern : /admin/pautas/new
+  defaults: { _controller: PautasBundle:Pautas:insert }
+  requirements:
+showPauta:
+  pattern : /admin/pa/{id}.{_format}
+  defaults: { _controller: PautasBundle:Pautas:showOne }
+  requirements:
+      _format:  html
+showPautas:
+  pattern : /admin/pautas/show/{page}/{cl}
+  defaults: { _controller: PautasBundle:Pautas:show, page: 1, cl: false }
+deletePauta:
+  pattern: /admin/costotarifa/delete/{id}
+  defaults: { _controller: PautasBundle:Pautas:delete }

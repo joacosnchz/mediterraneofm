@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Impresión</title>
+    <style>
+        body, table, tr, td, fieldset, span, div, p, th {
+            font-size: 0.94em;
+        }
+    </style>
+    <link rel="icon" href="{{ asset('../favicon.png') }}" type="image/x-icon" />
+    <script>
+    function printPage(){
+    document.getElementById('print').style.display='none';
+    document.getElementById('volver').style.display='none';
+    document.getElementById('exportar').style.display='none';
+    window.print();
+    document.getElementById('print').style.display='block';
+    document.getElementById('volver').style.display='block';
+    document.getElementById('exportar').style.display='block';
+    window.location='{{ path('insertOrdenPub') }}';
+    }
+    </script>
+</head>
+<body>
+
+{% block content %}
+
+    {% if web_dir == '' %} {# Si web dir es distinto de '', entonces el html que vemos es el que ira en el pdf #}
+        <input type="button" name="imprimir" value="Imprimir" onclick="printPage()" id="print">
+        <input type="button" name="volver" value="Volver" onclick="window.location='{% if returnUrl is defined %}{{ path(returnUrl) }}{% else %}{{ path('insertOrdenPub') }}{% endif %}'" id="volver">
+        <input type="button" name="exportar" value="Exportar como pdf" id="exportar" onclick="window.open('{{ path('createOrdenPdf', {'id': ordenpub.getIdOrdenPub, '_format': 'pdf'}) }}');">
+    {% endif %}
+    
+    <table style="width:100%">
+        <tr style="font-size: 250%">
+            <td>
+                <span style="float:left">Orden de publicidad</span>
+                <span style="float: right">N° OP/{{ ordenpub.getIdCliente.getIdAgencia }}-{{ ordenpub.getIdOrdenPub }}</span>
+            </td>
+        </tr>
+        <tr>
+            {% if membrete %}
+            <td align="center"><img src="{{ web_dir }}{{ asset('bundles/template/images/agencias/') }}{{ membrete }}" alt="membrete" /></td>
+            {% endif %}
+        </tr>
+    </table>
+    
+    <div style="height: 10px;"></div>
+    
+    <fieldset>
+        <legend>Datos del cliente</legend>
+        <table>
+            <tr><td>Nombre</td><td>{{ ordenpub.getIdCliente.getApellido }}, {{ ordenpub.getIdCliente.getNombre }}</td></tr>
+            <tr><td>Direccion</td><td>{{ ordenpub.getIdCliente.getDireccion }}</td></tr>
+            <tr><td>Comercio</td><td>{{ ordenpub.getIdCliente.getComercio }}</td></tr>
+            <tr><td>Teléfonos</td><td>{{ ordenpub.getIdCliente.getTelefonoComercial }} - {{ ordenpub.getIdCliente.getTelefonoParticular }}</td></tr>
+            <tr><td>E-Mail</td><td>{{ ordenpub.getIdCliente.getEmail }}</td></tr>
+            <tr><td>Celular</td><td>{{ ordenpub.getIdCliente.getCelular }}</td></tr>
+        </table>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Datos de la publicidad</legend>
+        <table>
+            <tr><td>Texto Publicidad</td><td><div id="texto">{{ ordenpub.getTextoPublicidad }}</div></td></tr>
+            <tr><td>Agencia</td><td>{{ ordenpub.getIdAgencia.getRazonSocial }}</td></tr>
+            <tr><td>Observaciones</td><td><div id="texto">{{ ordenpub.getObservaciones }}</div></td></tr>
+            <tr><td>Total</td><td><div id="texto">${{ ordenpub.getTotal|number_format(2, ',', '.') }}</div></td></tr>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Condiciones de pago</legend>
+        <table cellpadding="3">
+            <tr><td>Emisora</td><td>Tarifa</td><td>Fecha desde</td><td>Fecha hasta</td><td>Rec% / Desc%</td><td>Neto($)</td><td>Total($)</td></tr>
+            {% for datos in ordentarifas %}
+                <tr><td>{{ datos.getIdCostoTarifas.getIdTarifa.getIdEmisora.getNombre }}</td><td>{{ datos.getIdCostoTarifas.getIdTipoMencion.getNroMenciones }} menciones de {{ datos.getIdCostoTarifas.getDuracion }} segundos </td><td>{{ datos.fechaDesde|date('d-m-Y') }}</td><td>{{ datos.fechaHasta|date('d-m-Y') }}</td><td>{{ datos.recargo|number_format(2, ',', '.') }} / {{ datos.descuento|number_format(2, ',', '.') }}</td><td>{{ datos.neto|number_format(2, ',', '.') }}</td><td>{{ datos.total|number_format(2, ',', '.') }}</td></tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+    
+    {# <div style="height: 10px;page-break-after:always"></div> #}
+    
+    <hr style="border: dotted">
+    {# Pagaré ! #}
+    <div>
+        <span style="float: right;">{{ ordenpub.getIdCliente.getIdAgencia.getIdCiudad.getNombre }}, {{ pagare.getFechaEmision|date('d-m-Y') }}</span>
+        <br>
+        <p>El dia {{ pagare.getFechaCobro|date('d-m-Y') }} pageré sin protesto, la suma de pesos ($)
+        {{ pagare.getTotalLetras }} ({{ ordenpub.getTotal|number_format(2, ',', '.') }}) por igual importe recibido en servicios publicitarios.
+        ////////////////////
+        </p>
+        <br>
+        <span style="float: left;margin-top:-10px;margin-right:10px;">Son ${{ ordenpub.getTotal|number_format(2, ',', '.') }}.-</span>
+        <div style="height: 7em"></div>
+        <p style="float:right; margin-right: 0px;right:0" align="right">Firma y aclaración</p>
+    </div>
+
+    <div style="height: 10px;page-break-after:always"></div>
+    
+    {# Mostrar grillas de programacion #}
+    {{ render(controller('GrillasBundle:Grillas:show', {'select': emisorasSelected})) }}
+    {# EOF grillas de programacion #}
+{% endblock %}
+
+</body>
+</html>

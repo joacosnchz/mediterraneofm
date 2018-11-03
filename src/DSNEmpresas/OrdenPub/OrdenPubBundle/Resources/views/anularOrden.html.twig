@@ -1,0 +1,21 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}Anulación de orden{% endblock %}
+
+{% block content %}
+	Porfavor, escriba el motivo de la anulación de esta o estas ordenes de publicidad.
+	<form action="{{ path('anularOrdenPub', {'id_ord': id_ord}) }}" method="post" {{ form_enctype(form) }}>
+		<table class="resp">
+			<tr>
+				<td>{{ form_label(form.motivoAnula) }}</td>
+				<td>{{ form_widget(form.motivoAnula) }}</td>
+			</tr>
+			<tr>
+				<td>
+				{{ form_widget(form.save) }}&nbsp;&nbsp;
+				<button onclick="window.location='{{ path('showOrdenesPub') }}'">Cancelar</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}

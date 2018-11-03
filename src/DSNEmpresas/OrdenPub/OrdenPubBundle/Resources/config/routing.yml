@@ -1,0 +1,26 @@
+showOrdenPub:
+  pattern : /o/{nombre}.html
+  defaults: { _controller: OrdenPubBundle:OrdenPub:showOne }
+insertOrdenPub:
+  pattern : /ordenespub/new
+  defaults: { _controller: OrdenPubBundle:OrdenPub:insert }
+showOrdenesPub:
+  pattern : /ordenespub/show/{page}/{cl}
+  defaults: { _controller: OrdenPubBundle:OrdenPub:show, page: 1, cl: false }
+showGrilla:
+  pattern : /admin/ordenespub/grilla.html
+  defaults: { _controller: OrdenPubBundle:OrdenPub:showGrilla }
+deleteOrdenPub:
+  pattern: /ordenpub/delete/{id}
+  defaults: { _controller: OrdenPubBundle:OrdenPub:delete }
+anularOrdenPub:
+  pattern: /ordenpub/anular/{id_ord}
+  defaults: { _controller: OrdenPubBundle:OrdenPub:anular }
+renovarOrdenPub:
+  pattern: /ordenpub/renovar/{id}
+  defaults: { _controller: OrdenPubBundle:OrdenPub:renovar }
+createOrdenPdf:
+  pattern: /ordenpub/exportarpdf/{id}.{_format}
+  defaults: { _controller: OrdenPubBundle:OrdenPub:createOrdenPdf, _format: 'pdf' }
+  requirements:
+      _format: 'pdf'

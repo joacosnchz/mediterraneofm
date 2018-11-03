@@ -1,0 +1,7 @@
+parameters:
+    #grillas.controller.class: DSNEmpresas\Grillas\GrillasBundle\Controller\GrillasController
+
+services:
+    #grillas.controller:
+        #class: %grillas.controller.class%
+#        arguments: ["@security.context"]

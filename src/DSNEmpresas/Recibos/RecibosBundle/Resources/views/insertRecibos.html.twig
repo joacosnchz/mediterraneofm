@@ -1,0 +1,38 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block js %}
+<script src="{{ asset('bundles/template/js/jquery-1.8.3.js') }}"></script>
+<script src="{{ asset('bundles/template/js/jquery-ui-1.9.2.custom.js') }}"></script>
+<script>
+$(function() {
+$( "#mediterraneofm_mediterraneofmbundle_insertrecibostype_fecha" ).datepicker({ dateFormat: "dd-mm-yy" });
+});
+</script>
+<script>
+$(function() {
+$( document ).tooltip();
+});
+</script>
+{% endblock %}
+
+{% block title %}Generar nuevo recibo{% endblock %}
+
+{% block content %}
+
+<form action="{{ path('insertRecibos') }}" method="post" {{ form_enctype(form) }}>
+
+    <table class="resp">
+        <tr><th colspan="2"><h3>Generar nuevo recibo</h3></th></tr>
+        {% for form in form %}
+            <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="reset" value="cancelar"/>
+</form>
+
+{% endblock %}

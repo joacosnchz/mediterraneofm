@@ -1,0 +1,138 @@
+## YAML Template.
+                
+DSNEmpresas\Emisoras\EmisorasBundle\Entity\Emisoras:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        telefono_comercial:
+            - NotBlank: 
+                message: El campo telefono no puede estar vacio.
+            - Length:
+                max: 15
+                maxMessage: "El telefono no puede tener mas de {{ limit }} numeros."
+
+MediterraneoFM\MediterraneoFMBundle\Entity\Agencias:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        apellido:
+            - NotBlank: 
+                message: El campo apellido no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El apellido no puede tener mas de {{ limit }} caracteres."
+                
+DSNEmpresas\Tarifas\TarifasBundle\Entity\Tarifas:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo telefono no puede estar vacio.
+            - Length:
+                max: 30
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        id_emisora:
+            - NotBlank: 
+                message: El campo emisora no puede estar vacio.
+        fecha_desde:
+            - NotBlank: 
+                message: El campo fecha desde no puede estar vacio.
+            - Type: 
+                type: datetime
+                message: El campo fecha desde debe ser completado con una selección del calendario.
+        fecha_hasta:
+            - NotBlank: 
+                message: El campo fecha hasta no puede estar vacio y debe ser una selección del calendario.
+            - Type: 
+                type: datetime
+                message: El campo fecha hasta debe ser completado con una selección del calendario.
+                
+MediterraneoFM\MediterraneoFMBundle\Entity\Responsables:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        apellido:
+            - NotBlank: 
+                message: El campo apellido no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El apellido no puede tener mas de {{ limit }} caracteres."
+        id_agencia:
+            - NotBlank: 
+                message: El campo agencia hasta no puede estar vacio.
+        telefono_comercial:
+            - NotBlank: 
+                message: El campo telefono comercial no puede estar vacio.
+        username:
+            - NotBlank: 
+                message: El campo usuario desde no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "Su nombre de usuario no puede tener mas de {{ limit }} caracteres."
+                
+DSNEmpresas\Pautas\PautasBundle\Entity\Pautas:
+    properties:
+        id_tarifa:
+            - NotBlank: 
+                message: El campo tarifa no puede estar vacio.
+        periodo:
+            - NotBlank: 
+                message: El campo periodo no puede estar vacio.
+        duracion:
+            - NotBlank: 
+                message: El campo duracion desde no puede estar vacio y el dato ingresado debe ser numerico.
+        costo:
+            - NotBlank: 
+                message: El campo costo no puede estar vacio y el dato ingresado debe ser numerico.
+            - Type:
+                type: double
+                message: "El campo costo debe ser numerico, puede usar una coma (,) como separador decimal." 
+                
+MediterraneoFM\MediterraneoFMBundle\Entity\Programas:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Regex:
+                pattern: "/[[:alnum:]]/"
+                message: "Los caracteres ingresados en nombre no están permitidos."
+        duracion_desde:
+            - NotBlank: 
+                message: El campo duracion desde desde no puede estar vacio.
+        duracion_hasta:
+            - NotBlank: 
+                message: El campo duracion hasta no puede estar vacio.
+
+DSNEmpresas\Programaciones\ProgramacionesBundle\Entity\Programaciones:
+    properties:
+        id_emisora:
+            - NotBlank:
+                message: El campo emisora no puede estar vacio.
+        nombre:
+            - NotBlank:
+                message: El campo nombre no puede estar vacio.
+
+MediterraneoFM\MediterraneoFMBundle\Entity\TiposDocumentos:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: leyenda
+            message: 'La leyenda ingresada ya existe en la base de datos.'
+
+MediterraneoFM\MediterraneoFMBundle\Entity\TiposMenciones:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: nro_menciones
+            message: 'La cantidad de menciones ingresada ya existe en la base de datos.'

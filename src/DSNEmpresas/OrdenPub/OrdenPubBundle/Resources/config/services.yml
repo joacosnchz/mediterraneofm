@@ -1,0 +1,7 @@
+parameters:
+#    orden_pub.example.class: DSNEmpresas\OrdenPub\OrdenPubBundle\Example
+
+services:
+#    orden_pub.example:
+#        class: %orden_pub.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Liquidación</title>
+        <style>
+            body, table, td, tr, fieldset, span, div, p, legend, th {
+                font-size: 0.94em;
+            }
+            
+            #bigspace {
+                height:0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <table style="width:100%">
+            <tr style="font-size: 250%">
+                <td>
+                    <span style="float:left">Liquidacion de agencia</span>
+                </td>
+                <td>
+                    <span sytle="float:right">N° L/{{ liquidacion.getIdAgencia }}-{{ liquidacion.getId }}</span>
+                </td>
+            </tr>
+        <table>
+            <tr>
+                <td align="center"><img src="{{ web_dir }}{{ asset('bundles/template/images/agencias/') }}{{ liquidacion.getIdAgencia.getPathMembrete }}" alt="membrete" /></td>
+            </tr>
+        </table>
+
+        <div id="bigspace"></div>
+
+        <fieldset>
+            <legend>Liquidacion</legend>
+            <table width="100%">
+                <tr>
+                    <td>Fecha: {{ liquidacion.getFecha|date('d-m-Y') }}</td>
+                    <td>|</td>
+                    <td>Agencia: {{ liquidacion.getIdAgencia.getRazonSocial }}</td>
+                    <td>|</td>
+                    <td>Periodo: {{ movsData.fechaDesde }}/{{ movsData.fechaHasta }}</td>
+                </tr>
+            </table>
+        </fieldset>
+                
+        <div id="bigspace"></div><div id="bigspace"></div>
+
+        <table cellspacing="5px" cellpadding="5px" rules="rows">
+            <tr>
+                <td>#</td>
+                <td>Fecha</td>
+                <td>Nro. orden</td>
+                <td>Cliente</td>
+                <td>B. sujeta a comision($)</td>
+                <td>Comision(%)</td>
+                <td>Importe($)</td>
+            </tr>
+            {% for item in movimientos %}
+                {% if (loop.index % 2) == 0 %}
+                    <tr style="background-color: #EAE3E3">
+                {% else %}
+                    <tr>
+                {% endif %}
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.getIdOrdenPub.getFecha|date('d-m-Y') }}</td>
+                    <td>OP/{{ item.getIdOrdenPub.getIdCliente.getIdAgencia }}-{{ item.getIdOrdenPub }}</td>
+                    <td>{{ item.getIdOrdenPub.getIdCliente.getComercio }}</td>
+                    <td align="center">{{ item.getIdOrdenPub.getTotal|number_format(2, ',', '.') }}</td>
+                    <td align="center">{{ item.getPorcentaje|number_format(2, ',', '.') }}</td>
+                    <td align="center">{{ item.getImporteBase|number_format(2, ',', '.') }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td> {# index #}
+                <td></td> {# fecha orden #}
+                <td></td> {# nro orden #}
+                <td>Total base:</td>
+                <td align="center">${{ movsData.subTot|number_format(2, ',', '.') }}</td>
+                <td>Total liquidación:</td>
+                <td align="center">${{ liquidacion.getTotal|number_format(2, ',', '.') }}</td>
+            </tr>
+        </table>
+    </body>
+</html>

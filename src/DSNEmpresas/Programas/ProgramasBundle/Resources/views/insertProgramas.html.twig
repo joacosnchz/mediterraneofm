@@ -1,0 +1,71 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block js %}
+
+{# Timepicker #}
+<script src="{{ asset('bundles/template/js/timepicker/jquery.timepicker.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/template/css/timepicker/jquery.timepicker.css') }}" />
+
+<script>
+    $(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_desde, #mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_hasta' ).timepicker({ 'timeFormat': 'H:i' });
+    });
+</script>
+
+{# end timepicker #}
+
+<script>
+$(function() {
+    $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_desde' ).focus(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_desde' ).tooltip( "disable" );
+    });
+});
+</script>
+
+<script>
+$(function() {
+    $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_hasta' ).focus(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_hasta' ).tooltip( "disable" );
+    });
+});
+</script>
+
+<script>
+    $(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_desde, #mediterraneofm_mediterraneofmbundle_insertprogramastype_duracion_hasta, #mediterraneofm_mediterraneofmbundle_insertprogramastype_id_programacion' ).tooltip();
+    });
+</script>
+{% endblock %}
+
+{% block title %}Alta de programas{% endblock %}
+
+{% block content %}
+
+{% if errors %}
+    <div id="error">
+    <h3>Posibles errores:</h3>
+    <ul>
+    {% for error in errors %}
+        <li>{{ error.message }}</li>
+    {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+
+<form action="{{ path('insertProgramas') }}" method="post" {{ form_enctype(form) }}>
+
+    <table class="resp">
+        <tr><th colspan="2"><h3>Alta de programas</h3></th></tr>
+        {% for form in form %}
+            <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="reset" value="cancelar" onclick="window.location='{{ path('showProgramas') }}'"/>
+</form>
+
+{% endblock %}

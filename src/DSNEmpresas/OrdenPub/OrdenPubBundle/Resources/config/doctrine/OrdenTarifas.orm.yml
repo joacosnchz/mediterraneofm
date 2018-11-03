@@ -1,0 +1,57 @@
+DSNEmpresas\OrdenPub\OrdenPubBundle\Entity\OrdenTarifas:
+    type: entity
+    table: orden_tarifas
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fecha_desde:
+            type: date
+            nullable: true
+            column: fecha_desde
+        fecha_hasta:
+            type: date
+            nullable: true
+            column: fecha_hasta
+        descuento:
+            type: float
+            unsigned: false
+            nullable: true
+        recargo:
+            type: float
+            unsigned: false
+            nullable: true
+        neto:
+            type: float
+            unsigned: false
+            nullable: true
+        total:
+            type: float
+            unsigned: false
+            nullable: true
+    manyToOne:
+        id_costotarifas:
+            targetEntity: DSNEmpresas\Pautas\PautasBundle\Entity\Pautas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id_costotarifas:
+                    referencedColumnName: id_costotarifas
+            orphanRemoval: false
+        id_ordenpub:
+            targetEntity: DSNEmpresas\OrdenPub\OrdenPubBundle\Entity\OrdenPub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: pautas
+            joinColumns:
+                id_ordenpub:
+                    referencedColumnName: id_ordenpub
+                    onDelete: CASCADE
+                    # Al eliminar una orden, que se eliminen sus condiciones de pautas
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,87 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de liquidaciones{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/ctasctesagencias/js/bundleCustomJs.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block entidad %}liquidaciones{% endblock %}
+
+{% block filtro %}
+    <fieldset>
+        <legend>Filtro</legend>
+        {{ form_start(form) }}
+            <table><tr>
+                {% for form in form %}
+                    <td>{{ form_widget(form) }}</td>
+                {% endfor %}<td>
+                <button type="submit">Ir</button>
+                <button type="reset" onclick="window.location='{{ path('showLiquidaciones', {'page': 1, 'clear': 1}) }}'">Restablecer</button>
+            </tr></table>
+        {{ form_end(form) }}
+    </fieldset>
+{% endblock %}
+
+{% block datos %}<td>Fecha</td><td>Agencia</td><td>Total</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value="{{ item.getId }}" id="{{ item.getId }}" class="tf"></td>
+<td><a href="{{ path('showLiquidacion', {'id': item.getId }) }}" id="underlined">{{ item.getFecha|date('d-m-Y') }}</a></td>
+<td>{{ item.getIdAgencia.getRazonSocial }}</td>
+<td>${{ item.getTotal|number_format(2, ',', '.') }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertCtasCtesAgencias') }}'" />Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+<td><button id="exportar">Exportar a pdf</button></td>
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+
+<script>
+    $(function() {
+        $('#exportar').click(function() {
+            var ids;
+
+            ids = $('input[type=checkbox]:checked').map(function() {
+                return $(this).attr('value');
+            }).get();
+
+            if(ids.length > 0) {
+                var route = "{{ path('createCCPdf', {'id': "PLACEHOLDER"}) }}";
+                window.open(route.replace("PLACEHOLDER", ids));
+            }
+            else {
+                $( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Liquidaciones" action="{{ path('showLiquidaciones', {'page': 1}) }}" method="POST">
+    <input id="Liquidaciones" name="Liquidaciones" value="{{ app.session.get('Liquidaciones') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showLiquidaciones') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteLiquidaciones', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
+
+{% block editar_route %}var route = "{{ path('showResponsable', { 'nombre': "PLACEHOLDER", 'nombre2': "PLACEHOLDER2", '_format': 'html' }) }}";{% endblock %}

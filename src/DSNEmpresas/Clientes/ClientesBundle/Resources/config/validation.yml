@@ -1,0 +1,17 @@
+DSNEmpresas\Clientes\ClientesBundle\Entity\Clientes:
+    properties:
+        nombre:
+            - NotBlank: 
+                message: El campo nombre no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El nombre no puede tener mas de {{ limit }} caracteres."
+        apellido:
+            - NotBlank: 
+                message: El campo apellido no puede estar vacio.
+            - Length:
+                max: 35
+                maxMessage: "El apellido no puede tener mas de {{ limit }} caracteres."
+        telefono_comercial:
+            - NotBlank: 
+                message: El campo telefono comercial no puede estar vacio.

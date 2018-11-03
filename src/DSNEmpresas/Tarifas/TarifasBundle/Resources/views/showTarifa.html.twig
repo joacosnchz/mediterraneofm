@@ -1,0 +1,83 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}{{ tarifa.getNombre }}{% endblock %}
+
+{% block js %}
+<script>
+$(function() {
+$( "#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_desde, #mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_hasta" ).datepicker({ dateFormat: "dd-mm-yy" });
+});
+</script>
+
+<script>
+$(function() {
+    $( '#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_desde' ).focus(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_desde' ).tooltip( "disable" );
+    });
+});
+
+$(function() {
+    $( '#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_hasta' ).focus(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_hasta' ).tooltip( "disable" );
+    });
+});
+</script>
+
+<script>
+$(function() {
+    $( '#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_desde, #mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_hasta' ).tooltip({
+        position: {
+            my: "top-35",
+            at: "top-35",
+        },
+    });
+});
+</script>
+
+{# <script>
+$(function() {
+$( "#mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_desde, #mediterraneofm_mediterraneofmbundle_edittarifastype_fecha_hasta" ).datepicker({ dateFormat: "dd-mm-yy" });
+});
+</script>
+<script>
+$(function() {
+$( document ).tooltip();
+});
+</script> #}
+{% endblock %}
+
+{% block content %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="flash-notice"><div id="error">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+{% if errors is defined %}
+    <div id="error">
+        Posibles errores:
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<form action="{{ path('showTarifa', {'nombre': tarifa.getIdTarifa, 'nombre2': tarifa.getNombre|replace(' ', '-'), '_format': 'html' }) }}" method="post" {{ form_enctype(form) }}>        
+    <table class="resp">
+        <tr><th colspan="2"><h3>Edición de tarifas</h3></th></tr>
+        {% for form in form %}
+            <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="button" name="back" value="Cancelar" onclick="window.location='{{ path('showTarifas') }}'" />
+</form>
+
+{% endblock %}

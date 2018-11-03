@@ -1,0 +1,7 @@
+parameters:
+#    tarifas.example.class: DSNEmpresas\Tarifas\TarifasBundle\Example
+
+services:
+#    tarifas.example:
+#        class: %tarifas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,21 @@
+insertCtaCte:
+  pattern : /ctacte/new/{id_cliente}/{fecha_desde}/{fecha_hasta}
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:insert }
+showCtasCtes:
+  pattern : /ctasctes/show/{post}/{fecha_post_desde}/{fecha_post_hasta}/{cliente_post}
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:show, post: 0, fecha_post_desde: 00/00/0000, fecha_post_hasta: 00/00/0000, cliente_post: null }
+createPdf:
+  pattern : /ctacte/exportar/{fecha_desde}/{fecha_hasta}/{id_cliente}
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:createPdf }
+returnDescripcion:
+  pattern: /ctacte/returnDescripcion
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:returnDescripcion }
+deleteMov:
+  pattern: /ctacte/deleteMov/{id}/{fecha_desde}/{fecha_hasta}/{id_cliente}
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:deleteMov }
+saldoCliente:
+  pattern: /ctacte/saldos/{id_cliente}/{fecha_desde}/{fecha_hasta}
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:saldoCliente }
+saldosClientes:
+  pattern: /clientes/saldos.pdf
+  defaults: { _controller: CtasCtesClientesBundle:CtasCtesClientes:saldosClientes }

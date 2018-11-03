@@ -1,0 +1,24 @@
+DSNEmpresas\CtasCtesAgencias\CtasCtesAgenciasBundle\Entity\Liquidaciones:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        fecha:
+            type: date
+        total:
+            type: float
+    manyToOne:
+        idAgencia:
+            targetEntity: DSNEmpresas\Agencias\AgenciasBundle\Entity\Agencias
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id_agencia:
+                    referencedColumnName: id_agencia
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

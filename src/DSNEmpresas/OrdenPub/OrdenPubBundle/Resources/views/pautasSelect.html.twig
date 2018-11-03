@@ -1,0 +1,15 @@
+{% if pautas %}
+	<option value="0">Seleccione pauta</option>
+	{% for p in pautas %}
+            <option value="{{ p.getIdCostoTarifas }}-{{ p.getCosto }}" >
+            {% if p.getIdTipoMencion.getNroMenciones < 10 %}
+            	0{{ p.getIdTipoMencion.getNroMenciones }}
+            {% else %}
+            	{{ p.getIdTipoMencion.getNroMenciones }}
+            {% endif %}
+            menciones de {{ p.getDuracion }} segundos por $ {{ p.getCosto|number_format(2, ',', '.') }}
+            </option>
+	{% endfor %}
+{% else %}
+	<option value="0">No hay pautas definidas para esta tarifa</option>
+{% endif %}

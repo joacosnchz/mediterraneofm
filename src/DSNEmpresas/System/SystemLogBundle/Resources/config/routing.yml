@@ -1,0 +1,14 @@
+insertSystemLog:
+  pattern: /systemlog/new
+  defaults: { _controller: SystemLogBundle:Mods:insert }
+showSystemLog:
+  pattern: /systemlog/show/{page}
+  defaults: { _controller: SystemLogBundle:Mods:show, page: 1 }
+editSystemLog:
+  pattern: /systemlog/edit/{id}.{_format}
+  defaults: { _controller: SystemLogBundle:Mods:showOne }
+  requirements:
+    _format: html
+deleteSystemLog:
+  pattern: /systemlog/delete/{id}
+  defaults: { _controller: SystemLogBundle:Mods:delete }

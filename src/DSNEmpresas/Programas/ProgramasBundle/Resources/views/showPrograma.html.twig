@@ -1,0 +1,43 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}{{ programa.getNombre }}{% endblock %}
+
+{% block js %}
+{# Timepicker #}
+<script src="{{ asset('bundles/template/js/timepicker/jquery.timepicker.js') }}"></script>
+<script src="{{ asset('bundles/template/js/timepicker/jquery.timepicker.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/template/css/timepicker/jquery.timepicker.css') }}" />
+
+<script>
+    $(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_editprogramastype_duracion_desde, #mediterraneofm_mediterraneofmbundle_editprogramastype_duracion_hasta' ).timepicker({ 'timeFormat': 'H:i' });
+    });
+</script>
+
+{# end timepicker #}
+
+<script>
+    $(function() {
+        $( '#mediterraneofm_mediterraneofmbundle_editprogramastype_id_programacion' ).tooltip();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+        
+<form action="{{ path('showPrograma', {'id': programa.getIdPrograma, 'nombre': programa.getNombre, '_format': 'html' }) }}" method="post" {{ form_enctype(form) }}>        
+    <table class="resp">
+        <tr><th colspan="2"><h3>Edición de programas</h3></th></tr>
+                {% for form in form %}
+        <tr style="height:32px;"><td>{{ form_label(form) }}</td><td>{{ form_widget(form) }}</td></tr>
+                {% endfor %}
+    </table>
+
+    <hr>
+
+    Los campos marcados con un asterisco <span id="required">(*)</span> son obligatorios. <br>  
+    <input type="submit" value="aceptar"/>
+    <input type="button" name="back" value="Cancelar" onclick="window.location='{{ path('showProgramas') }}'" />
+</form>
+
+{% endblock %}

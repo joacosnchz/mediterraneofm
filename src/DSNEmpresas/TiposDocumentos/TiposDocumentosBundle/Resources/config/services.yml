@@ -1,0 +1,7 @@
+parameters:
+#    tipos_documentos.example.class: DSNEmpresas\TiposDocumentos\TiposDocumentosBundle\Example
+
+services:
+#    tipos_documentos.example:
+#        class: %tipos_documentos.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

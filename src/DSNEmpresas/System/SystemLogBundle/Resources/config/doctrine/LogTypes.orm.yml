@@ -1,0 +1,14 @@
+DSNEmpresas\System\SystemLogBundle\Entity\LogTypes:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        descripcion:
+            type: string
+            length: '25'
+    lifecycleCallbacks: {  }

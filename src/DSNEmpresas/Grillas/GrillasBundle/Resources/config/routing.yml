@@ -1,0 +1,6 @@
+insertGrillas:
+  pattern : /admin/grillas/new
+  defaults: { _controller: GrillasBundle:Grillas:insert }
+showGrillas:
+  pattern : /admin/grillas/show/{select}
+  defaults: { _controller: GrillasBundle:Grillas:show, select: 'all' }

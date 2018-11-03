@@ -1,0 +1,6 @@
+<fieldset>
+	<legend>{{ 'Results'|trans({}, 'domain') }}</legend>
+	{% for result in results %}
+		<a href="#" id="underlined" onClick="onSelection({{ result.getId }})">{{ attribute(result, property) }}</a><br>
+	{% endfor %}
+</fieldset>

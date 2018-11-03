@@ -1,0 +1,28 @@
+insertCtasCtesAgencias:
+    pattern:  /admin/ctasctesa/new
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:insert }
+newMov:
+    pattern:  /admin/ctasctesa/newM
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:newMov }
+showLiquidaciones:
+    pattern:  /admin/ctasctesa/show/{page}/{clear}
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:show, page: 1, clear: false }
+showLiquidacion:
+    pattern: /admin/cca/show/{id}
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:showOne }
+deleteLiquidaciones:
+    pattern:  /admin/ctasctesa/delete/{id}
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:delete }
+calculate:
+    pattern:  /admin/ctasctesa/calc
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:calcu }
+createCCPdf:
+    pattern:  /admin/liquidacion/exportar/{id}
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:createPdf }
+createNCPdf:
+    pattern:  /admin/exportar2/{ids_ord}/{fecha_desde}/{fecha_hasta}/nocobradas.{_format}
+    defaults: { _controller: CtasCtesAgenciasBundle:CtasCtesAgencias:createPdf2, _format: html }
+    requirements:
+        _format: html|pdf
+        fecha_desde: "^([0-9]){2}-([0-9]){2}-([0-9]){4}$"
+        fecha_hasta: "^([0-9]){2}-([0-9]){2}-([0-9]){4}$"

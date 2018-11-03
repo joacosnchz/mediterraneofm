@@ -1,0 +1,15 @@
+{% block searchEntity_widget %}
+	<script src="{{ asset('bundles/template/js/Form/formJs.js') }}" type="text/javascript"></script>
+
+	<form class="searchEntityForm" method="post">
+	{% spaceless %}
+		{{ form_widget(form.result) }}
+		<a href="#" class="sear"><img src="{{ asset('bundles/template/images/lens.png') }}" alt="{{ 'lens'|trans({}, 'domain') }}" /></a>
+		<input type="hidden" value='{{ path('searchEntity') }}' class="act" />
+	{% endspaceless %}
+
+	<div id="searchDialog" title="{{ 'Search'|trans({}, 'domain') }}">
+		<p>{% include 'TemplateBundle:Form:searchDialog.html.twig' with {'form': form} %}</p>
+	</div>
+	</form>
+{% endblock %}

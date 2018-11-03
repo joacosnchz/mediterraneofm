@@ -1,0 +1,45 @@
+<title>{% block title %} Impresión {% endblock %}</title>
+
+{% block content %}
+<SCRIPT>
+function printPage(){
+document.getElementById('print').style.display='none';
+document.getElementById('volver').style.display='none';
+window.print();
+document.getElementById('print').style.display='block';
+document.getElementById('volver').style.display='block';
+window.location='{{ path('insertRecibos') }}';
+}
+</SCRIPT>
+
+    <input type="button" name="imprimir" value="Imprimir" onclick="printPage()" id="print">
+    <input type="button" name="imprimir" value="Volver" onclick="window.location='{{ path('insertRecibos') }}';" id="volver">
+    
+    <table style="width:100%">
+        <tr>
+            <td align="right"><img src="{{ asset('bundles/template/images/logo000.png') }}" alt="radio10" /></td>
+            <td align="center"><img src="{{ asset('bundles/template/images/logo001.png') }}" alt="la100" /></td>
+            <td align="left"><img src="{{ asset('bundles/template/images/logo002.png') }}" alt="mitre" /></td>
+        </tr>
+    </table>
+    
+    <div style="height: 10px;"></div>
+
+    <div style="border:1px solid #000">
+    
+
+    <table>
+        <tr><th colspan="2">Datos del recibo</th></tr>
+        <tr><td>Nro. Recibo</td><td>{{ data.nrorecibo }}</td></tr>
+        <tr><td>Fecha</td><td>{{ data.fecha|date('d-m-Y') }}</td></tr>
+        <tr><td>Nombre</td><td>{{ data.nombre }}</td></tr>
+        <tr><td>Domicilio</td><td>{{ data.domicilio }}</td></tr>
+        <tr><td>Teléfono</td><td>{{ data.telefono }}</td></tr>
+        <tr><td>Localidad</td><td>{{  data.getIdCiudad.getNombre }}</td></tr>
+        <tr><td>Iva</td><td>{{ data.iva }}</td></tr>
+        <tr><td>Importe</td><td>{{ data.importe }}</td></tr>
+        <tr><td>Concepto</td><td>{{ data.concepto }}</td></tr>
+        <tr><td>Total</td><td>{{ data.total }}</td></tr>
+    </table>
+
+{% endblock %}

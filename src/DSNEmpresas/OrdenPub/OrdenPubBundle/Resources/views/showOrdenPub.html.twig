@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %} Impresión {% endblock %}</title>
+    <style>
+        body, table, tr, td, fieldset, span, div, p, legend, th {
+            font-size: 0.96em;
+        }
+    </style>
+</head>
+<body>
+
+{% block content %}
+<link rel="icon" href="{{ asset('../favicon.png') }}" type="image/x-icon" />
+<script>
+function printPage(){
+document.getElementById('print').style.display='none';
+document.getElementById('volver').style.display='none';
+document.getElementById('exportar').style.display='none';
+window.print();
+document.getElementById('print').style.display='inline';
+document.getElementById('volver').style.display='inline';
+document.getElementById('exportar').style.display='inline';
+window.location='{{ path('showOrdenesPub') }}';
+}
+</script>
+
+    <input type="button" name="imprimir" value="Imprimir" onclick="printPage()" id="print">
+    <input type="button" name="volver" value="Volver" onclick="window.location='{{ path('showOrdenesPub') }}'" id="volver">
+    {# <input type="button" name="volver" value="Volver" onclick="window.close()" id="volver"> #}
+    <input type="button" name="exportar" id="exportar" value="Exportar como pdf" onclick="window.open('{{ path('createOrdenPdf', {'id': datos.id, '_format': 'pdf'}) }}');">
+    
+    <table style="width:100%">
+        <tr>
+            <td align="center"><img src="{{ asset('bundles/template/images/agencias/') }}{{ membrete }}" alt="membrete" /></td>
+            {# <td align="right"><img src="{{ asset('bundles/template/images/logo000.png') }}" alt="radio10" /></td>
+            <td align="center"><img src="{{ asset('bundles/template/images/logo001.png') }}" alt="la100" /></td>
+            <td align="left"><img src="{{ asset('bundles/template/images/logo002.png') }}" alt="mitre" /></td> #}
+        </tr>
+    </table>
+    
+    <div style="height: 10px;"></div>
+
+    <fieldset>
+        <legend>Datos de la orden</legend>
+        <table>
+            <tr><td>Nro. Orden Publicidad</td><td>{{ datos.nroordenpub }}</td></tr>
+        </table>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Datos del cliente</legend>
+        <table>
+            <tr><td>Nombre</td><td>{{ datoscliente.getNombre }}, {{ datos.cliente.getApellido }}</td></tr>
+            <tr><td>Direccion</td><td>{{ datos.cliente.getDireccion }}</td></tr>
+            <tr><td>Comercio</td><td>{{ datos.cliente.getComercio }}</td></tr>
+            <tr><td>Teléfonos</td><td>{{ datos.cliente.getTelefonoComercial }} - {{ datos.cliente.getTelefonoParticular }}</td></tr>
+            <tr><td>E-Mail</td><td>{{ datos.cliente.getEmail }}</td></tr>
+            <tr><td>Celular</td><td>{{ datos.cliente.getCelular }}</td></tr>
+          </table>
+    </fieldset>
+      
+    <fieldset>
+        <legend>Datos de la publicidad</legend>
+        <table>
+            <tr><td>Texto Publicidad</td><td><div id="texto">{{ datos.textopub }}</div></td></tr>
+            <tr><td>Agencia</td><td>{{ datos.agencia.getRazonSocial }}</td></tr>
+            <tr><td>Observaciones</td><td><div id="texto">{{ datos.observaciones }}</div></td></tr>
+            <tr><td>Total</td><td><div id="texto">${{ datos.total|number_format(2, ',', '.') }}</div></td></tr>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Condiciones de pago</legend>
+        <table cellpadding="5" cellspacing="5">
+            <tr><td>Emisora</td><td>Tarifa</td><td>Fecha desde</td><td>Fecha hasta</td><td>Recargo</td><td>Descuento</td><td>Neto</td><td>Total</td></tr>
+            {% for datos in ordentarifas %}
+                <tr><td>{{ datos.getIdCostoTarifas.getIdTarifa.getIdEmisora.getNombre }}</td><td>{{ datos.getIdCostoTarifas.getIdTipoMencion.getNroMenciones }} menciones de {{ datos.getIdCostoTarifas.getDuracion }} segundos por ${{ datos.getIdCostoTarifas.getCosto|number_format(2, ',', '.') }}</td><td>{{ datos.fechaDesde|date('d-m-Y') }}</td><td>{{ datos.fechaHasta|date('d-m-Y') }}</td><td>{{ datos.recargo|number_format(2, ',', '.') }}</td><td>{{ datos.descuento|number_format(2, ',', '.') }}</td><td>{{ datos.neto|number_format(2, ',', '.') }}</td><td>{{ datos.total|number_format(2, ',', '.') }}</td></tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+    
+    <div style="height: 10px;"></div>
+    
+    <hr style="border: dotted">
+    {# Pagaré ! #}
+    <div>
+        <span style="float: right;">{{ datos.cliente.getIdAgencia.getIdCiudad.getNombre }}, {{ pagare.fechaEmision|date('d-m-Y') }}</span>
+        <p>&nbsp;</p>
+        <p>El dia {{ pagare.fechaCobro|date('d-m-Y') }} pageré sin protesto, la suma de pesos ($)
+            {{ pagare.totalLetras }} (${{ pagare.total|number_format(2, ',', '.') }}) por igual importe recibido en servicios publicitarios.////////////////////
+        </p>
+        <br>
+        <br>
+        <br>
+        <p>Firma y aclaración</p>
+        <span style="float: right;margin-top:-20px;margin-right:10px;">Son ${{ pagare.total|number_format(2, ',', '.') }}.-</span>
+    </div>
+
+    <div style="height: 5px;page-break-after:always"></div>
+
+    {# Mostrar grillas de programacion #}
+    {{ render(controller('GrillasBundle:Grillas:show', {'select': emisorasSelected})) }}
+    {# EOF grillas de programacion #}
+
+{% endblock %}
+
+</body>
+</html>

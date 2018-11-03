@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ordenes no cobradas</title>
+        <style>
+            body, table, td, tr, fieldset, span, div, p, legend, th {
+                font-size: 0.94em;
+            }
+        </style>
+    </head>
+    <body>
+
+    {% block content %}
+        <table style="width:100%">
+            <tr style="font-size: 250%">
+                <td>
+                    <span style="float:left">Ordenes no cobradas</span>
+                </td>
+            </tr>
+            <tr>
+                {% if membrete %}
+                <td align="center"><img src="{{ web_dir }}{{ asset('bundles/template/images/agencias/') }}{{ membrete }}" alt="membrete" /></td>
+                {% endif %}
+            </tr>
+        </table>
+
+        {% if ordenes %}
+                <fieldset>
+                <legend>Listado de liquidaciones</legend>
+                        <table width="100%">
+                                <tr>
+                                        <td>Fecha:</td><td>{{ 'now'|date('d-m-Y') }}</td>
+                                        <td>|</td>
+                                        <td>Agencia:</td><td>{{ agencia.getRazonSocial }}</td>
+                                        <td>|</td>
+                                        <td>Periodo:</td><td>{{ fecha_desde }} / {{ fecha_hasta }}</td>
+                                </tr>
+                        </table>
+                </fieldset>
+
+                <div style="height:16px;"></div>
+
+                <table rules="rows" border="0" bordercolor="#808080" frame="below" cellpadding="5" cellspacing="5px">
+                    <tr>
+                        <td>#</td>
+                        <td>Nro. orden</td>
+                        <td>Fecha emision</td>
+                        <td>Cliente</td>
+                        <td>Estado</td>
+                        <td colspan="6">Tarifa Fecha desde Fecha hasta Desc/Rec Subtotal Vigencia</td>
+                    </tr>
+                {% for item in ordenes %}
+                     {% if (loop.index % 2) == 0 %}
+                        <tr style="background-color: #EAE3E3">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.getNroOrdenPub }}</td>
+                        <td>{{ item.getFecha|date('d-m-Y') }}</td>
+                        <td>{{ item.getIdCliente.getComercio }}</td>
+                        <td align="center">{% if item.getEstado == 1 %}Activa{% else %}<span id="required">Anulada</span>{% endif %}</td>
+                        <td colspan="6">
+                            <table>
+                            {% for item2 in ordenes_t %}
+                                <tr>
+                                {% if item2.getIdOrdenPub.getIdOrdenPub == item.getIdOrdenPub %}
+                                    <td style="width: 10px">{{ item2.getIdCostoTarifas.getIdTarifa.getNombre|slice(0, 3) }}..</td>
+                                    <td style="width: 60px; padding: 0 10px 0 10px;">{{ item2.getFechaDesde|date('d-m-Y') }}</td>
+                                    <td style="width: 60px; padding: 0 10px 0 10px;">{{ item2.getFechaHasta|date('d-m-Y') }}</td>
+                                    <td>{{ item2.getDescuento|number_format(2, ',', '.') }}/{{ item2.getRecargo|number_format(2, ',', '.') }}</td>
+                                    <td style="padding:7px">${{ item2.getTotal|number_format(2, ',', '.') }}</td>
+                                    <td>{% if item2.getIdOrdenPub.getIdOrdenPub in vencidas %}Vencida{% else %}Vigente{% endif %}</td>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </td>
+                        {# <td><table rules="rows" border="0" bordercolor="#808080" frame="below" cellpadding="5px">
+                        <tr><td>Tarifa</td><td>Fecha desde</td><td>Fecha hasta</td><td>Desc/Rec</td><td>Subtotal</td><td>Vigencia</td></tr>
+                        {% for item2 in ordenes_t %}
+                            {% if item2.getIdOrdenPub.getIdOrdenPub == item.getIdOrdenPub %}
+                                <tr>
+                                    <td>{{ item2.getIdCostoTarifas.getIdTarifa.getNombre }}</td>
+                                    <td>{{ item2.getFechaDesde|date('d-m-Y') }}</td>
+                                    <td>{{ item2.getFechaHasta|date('d-m-Y') }}</td>
+                                    <td>{{ item2.getDescuento|number_format(2, ',', '.') }}/{{ item2.getRecargo|number_format(2, ',', '.') }}</td>
+                                    <td>${{ item2.getTotal|number_format(2, ',', '.') }}</td>
+                                    <td>{% if item2.getIdOrdenPub.getIdOrdenPub in vencidas %}Vencida{% else %}Vigente{% endif %}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </table></td> #}
+                    </tr>
+                {% endfor %}
+                </table>
+        {% endif %}
+
+    {% endblock %}
+    </body>
+</html>

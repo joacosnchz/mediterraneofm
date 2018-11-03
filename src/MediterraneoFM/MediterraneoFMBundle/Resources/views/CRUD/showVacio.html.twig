@@ -1,0 +1,10 @@
+{% block content %}
+<table border="1" class="show" cellpadding='5px'>
+	<tr><th colspan="5"><h3>Lista de {{ entity }}</h3></th></tr>
+</table>
+
+<p>En este momento no se han encontrado {{ entity }}</p>
+
+<button onclick="window.location='{% if nuevo is defined %}{{ nuevo }}{% endif %}'">Nuevo</button>
+<input type="button" value="Volver" onclick="javascript:window.history.go(-1);" id="volver">
+{% endblock %}

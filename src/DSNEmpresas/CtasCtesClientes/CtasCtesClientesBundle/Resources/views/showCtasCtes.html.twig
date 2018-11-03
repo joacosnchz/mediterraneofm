@@ -1,0 +1,64 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}Cuenta corriente{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('bundles/template/js/phpjs.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('bundles/ctasctesclientes/js/bundleCustomJs.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice"><div id="success">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="flash-notice"><div id="error">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+{% if errors is defined %}
+<div id="error">
+    Posibles errores:
+    <ul>
+    {% for item in errors %}
+        <li>{{ item.message }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div id="response"></div>
+
+<form action="{{ path('showCtasCtes') }}" method="post" {{ form_enctype(form) }} id="form2" >
+
+    <table class="resp">
+        <tr><th colspan="2"><h3>Cuenta corriente</h3></th></tr>
+        <tr style="height:32px;">
+            {% if post == true %}
+                <td>{{ form_label(form.fecha.fecha_desde) }}</td><td>{{ form_widget(form.fecha.fecha_desde, {value: fecha_desde}) }}</td>
+                <td>{{ form_label(form.fecha.fecha_hasta) }}</td><td>{{ form_widget(form.fecha.fecha_hasta, {value: fecha_hasta}) }}</td>
+                <td>{{ form_label(form.idCliente) }}</td><td>{{ form_widget(form.idCliente) }}</td>
+            {% else %}
+                <td>{{ form_label(form.fecha.fecha_desde) }}</td><td>{{ form_widget(form.fecha.fecha_desde) }}</td>
+                <td>{{ form_label(form.fecha.fecha_hasta) }}</td><td>{{ form_widget(form.fecha.fecha_hasta) }}</td>
+                <td>{{ form_label(form.idCliente) }}</td><td>{{ form_widget(form.idCliente) }}</td>
+            {% endif %}
+        <td>&nbsp;&nbsp;&nbsp;<input type="submit" value="Ir" id="subf2" /></td></tr>
+    </table>
+    
+</form>
+
+<hr>
+
+{% if ctacte or saldoanterior is defined %}
+    {% include 'CtasCtesClientesBundle::movimientosCtaCte.html.twig' %}	
+{% else %}
+    El cliente seleccionado no tiene movimientos en su cuenta en el rango de fechas ingresado.
+{% endif %}
+
+{% endblock %}

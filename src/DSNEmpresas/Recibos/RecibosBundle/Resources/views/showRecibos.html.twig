@@ -1,0 +1,46 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de recibos{% endblock %}
+
+{% block entidad %}recibos{% endblock %}
+
+{% block datos %}<td>Nro. recibo</td><td>Fecha</td><td>Cliente</td><td>Importe</td><td>Total</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value="{{ item.getNroRecibo }}" id="{{ item.getNroRecibo }}" class="tf"></td>
+<td>{{ item.getNroRecibo }}</td>
+<td id="option">{{ item.getFecha|date('d-m-Y') }}</td>
+<td>{{ item.getIdOrdenPub.getIdCliente.getComercio }}</td>
+<td id="option">{{ item.getImporte }}</td>
+<td>${{ item.getTotal|number_format(2, ',', '.') }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertRecibos') }}'" />Nuevo</button></td>
+{# <td><button id="borrar">Borrar</button></td> #}
+<td><button id="selectAll">Seleccionar todo</button</td>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Recibos" action="{{ path('showRecibos', {'page': 1}) }}" method="POST">
+    <input id="Recibos" name="Recibos" value="{{ app.session.get('Recibos') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showRecibos') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteRecibo', { 'id': "PLACEHOLDER" }) }}";{% endblock %}

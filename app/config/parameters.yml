@@ -1,0 +1,19 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: your_database
+    database_user: your_user
+    database_password: your_pass
+
+    mailer_transport: gmail
+    mailer_host: null
+    mailer_user: your_google_user@gmail.com
+    mailer_password: your_googlepassword
+    locale: es
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    debug_toolbar: true
+    debug_redirects: false
+    use_assetic_controller: true

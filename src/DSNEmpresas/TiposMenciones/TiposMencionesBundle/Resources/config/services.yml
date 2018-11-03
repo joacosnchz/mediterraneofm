@@ -1,0 +1,7 @@
+parameters:
+#    tipos_menciones.example.class: DSNEmpresas\TiposMenciones\TiposMencionesBundle\Example
+
+services:
+#    tipos_menciones.example:
+#        class: %tipos_menciones.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

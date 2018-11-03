@@ -1,0 +1,8 @@
+{% if tarifas %}
+	<option value="0">Tarifas</option>
+	{% for t in tarifas %}
+		<option value="{{ t.getIdTarifa }}">{{ t.getNombre }}</option>
+	{% endfor %}
+{% else %}
+	<option value="0">No hay tarifas definidas para esta emisora</option>
+{% endif %}

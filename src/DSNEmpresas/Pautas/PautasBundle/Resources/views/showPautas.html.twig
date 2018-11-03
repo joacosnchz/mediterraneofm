@@ -1,0 +1,205 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}Lista de pautas{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    function checkAll(checkname, bx) {
+        for (i = 0; i < checkname.length; i++){
+            checkname[i].checked = bx.checked? true:false;
+        }
+    }
+    function checkPage(bx){
+
+
+        var bxs = document.getElementByTagName ( "table" ).getElementsByTagName ( "link[]" ); 
+
+        for(i = 0; i < bxs.length; i++){
+            bxs[i].checked = bx.checked? true:false;
+        }
+    }
+</script>
+
+<script>
+$(function() {
+    $('#mediterraneofm_mediterraneofmbundle_newpautasfiltertype_id_tarifa').live('keypress', function(e) {
+        var keyCode = e.keyCode || e.which; 
+        e.preventDefault();
+
+        var url = $('#form').attr('action');
+        var id_emisora = $('#mediterraneofm_mediterraneofmbundle_newpautasfiltertype_id_tarifa').val();
+
+        if(keyCode == 9) {
+            $.post(url, {'id_emisora': id_emisora}).done(function(content) {
+                $('#response').html(content);
+            });
+        }
+    })
+});
+</script>
+
+<script>
+$(function() {
+    $( '#response' ).tooltip({
+        position: {
+            my: "top-35",
+            at: "top-35",
+        },
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice"><div id="success">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="flash-notice"><div id="error">
+        {{ flashMessage }}
+    </div></div>
+{% endfor %}
+
+<span id="message"></span>
+
+<table class="resp" cellpadding="5px">
+    <tr><th colspan="5"><h3>Lista de pautas</h3></th></tr>
+</table>
+
+<fieldset>
+    <legend>Herramientas</legend>
+    <table class="resp">
+        <tr>
+            <td><button name="nuevo" onclick="window.location='{{ path('insertPautas') }}'" />Nuevo</button></td>
+            <td><button id="borrar">Borrar</button></td>
+            <td><button id="editar">Editar</button></td>
+            <td><button id="selectAll">Seleccionar todo</button</td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Filtro</legend>
+    <form action="{{ path('showPautas') }}" method="post" {{ form_enctype(form) }} id="form">
+        <table class="resp"><tr>
+            {% for form in form %}
+                <td>{{ form_widget(form) }}</td>
+            {% endfor %}
+            {# <td><select id="response" name="tarifas" title="Seleccione emisora para ver tarifas"><option value="0">Tarifa</option</select></td> #}
+            <td><input type="submit" value="Ir"></td>
+            <td><input type="button" value="Restablecer" onclick='window.location="{{ path('showPautas', {cl: true}) }}"'/></td>
+        </tr></table>
+    </form>
+</fieldset>
+        
+<div id="bigspace"></div><div id="bigspace"></div>
+
+<table class="resp" rules="rows" border="1" class="listado" bordercolor="#808080" frame="below" cellpadding="5px" name="table">
+
+<form name="list00" id="myform" action="#">
+    
+    <tr id="option"><td>#</td><td><input type="checkbox" name="Check_ctr" value="yes" onClick="checkAll(document.list00, this)"></td><td>Descripción</td><td>Tarifa</td><td>Duración</td><td>Periodo</td><td>Costo</td><td>Menciones</td></tr>
+        {% for item in pager.getResults %}
+            <tr id="list">
+                <td id="option">{{ loop.index }}</td>
+                <td><input type="checkbox" name="link[]" value="{{ item.getIdCostoTarifas }}" id="{{ item.getIdCostoTarifas }}" class="tf"></td>
+                <td><a href="{{ path('showPauta', {'id': item.getIdCostoTarifas, '_format': 'html'}) }}" id="underlined">
+                {% if item.getIdTipoMencion.getNroMenciones < 10 %}
+                    0{{ item.getIdTipoMencion.getNroMenciones }} 
+                {% else %}
+                    {{ item.getIdTipoMencion.getNroMenciones }}
+                {% endif %}
+                menciones de {{ item.getDuracion }} segundos por ${{ item.getCosto|number_format(2, ',', '.') }}</a></td>
+                <td id="option">{{ item.getIdTarifa.getNombre }}</td>
+                <td id="option" align="center">{{ item.getDuracion }}</td>
+                <td id="option">{{ item.getPeriodo }}</td>
+                <td id="option">${{ item.getCosto|number_format(2, ',', '.') }}</td>
+                <td id="option" align="center">{{ item.getIdTipoMencion.getNroMenciones }}</td>
+            </tr>
+        {% endfor %}
+</table>
+</form>
+
+<script>
+$(function () {
+    $('#selectAll').toggle(
+        function() {
+            $('#list .tf').prop('checked', true);
+        },
+        function() {
+            $('#list .tf').prop('checked', false);
+        }
+    );
+});
+</script>
+                
+<script>
+$(function() {
+    $('#borrar').click(function() {
+        $( "#dialog-confirm" ).dialog( "open" );
+    });
+    
+    $( "#dialog-confirm" ).dialog({
+    autoOpen: false,
+    draggable: false,
+    resizable: false,
+    height:350,
+    modal: true,
+    buttons: {
+        Cancelar: function() {
+            $( this ).dialog( "close" );
+        },
+        "Aceptar": function() {
+            ids = $('input[type=checkbox]:checked').map(function() {
+                return $(this).attr('value');
+            }).get();
+            
+            if(ids.length > 0) {
+                var route = "{{ path('deletePauta', { 'id': "PLACEHOLDER" }) }}";
+                window.location = route.replace("PLACEHOLDER", ids);
+            }
+            else {
+                $( this ).dialog( "close" );
+                $( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+            }
+        }
+    }
+    });
+});
+</script>
+
+<script>
+$('#editar').click(function() {
+    var ids;
+
+    ids = $('input[type=checkbox]:checked').map(function() {
+        return $(this).attr('value');
+    }).get();
+    
+    if(ids.length > 0) {
+	    var route = "{{ path('showPauta', { 'id': "PLACEHOLDER", '_format': 'html' }) }}";
+	    window.location = route.replace("PLACEHOLDER", ids);
+    }
+    else {
+    	$( '#message ').html('<div id="error">Debe seleccionar un elemento de la lista.</div>').fadeIn( 100 ).delay( 1000 ).slideUp( 800 );
+    }
+});
+</script>
+
+<div id="dialog-confirm" title="¿ Está seguro ?">
+    <p>Está apunto de eliminar una pauta.<br><span style="font-weight: bold">¿ Está seguro ?</span></p>
+</div>
+        
+Mostrar: <form name="pautascant" action="{{ path('showPautas') }}" method="POST"><input id="pautascant" name="pautascant" value="{{ app.session.get('pautascant') }}" size="1" maxlength="3"></form>
+
+<div class="wrapper-pages">
+        {% if pager.isPaginable %}
+            {{ paginate(pager, 'showPautas') }}
+        {% endif %}
+</div>
+
+{% endblock %}

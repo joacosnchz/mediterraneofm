@@ -1,0 +1,7 @@
+parameters:
+#    facturas.example.class: DSNEmpresas\Facturas\FacturasBundle\Example
+
+services:
+#    facturas.example:
+#        class: %facturas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

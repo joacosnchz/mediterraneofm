@@ -1,0 +1,63 @@
+{% extends 'TemplateBundle::template.html.twig' %}
+
+{% block title %}{{ liquidacion.getIdAgencia.getRazonSocial }} - {{ liquidacion.getFecha|date('d-m-Y') }}{% endblock %}
+
+{% block content %}
+    <table>
+    <th>Liquidación: {{ liquidacion.getIdAgencia.getRazonSocial }} / {{ liquidacion.getFecha|date('d-m-Y') }}</th>
+    </table>
+
+    <div id="bigspace"></div>
+
+    <fieldset>
+        <legend>Liquidacion</legend>
+        <table border="0">
+            <tr>
+                <td>Fecha: {{ liquidacion.getFecha|date('d-m-Y') }}</td>
+                <td>|</td>
+                <td>Agencia: {{ liquidacion.getIdAgencia.getRazonSocial }}</td>
+                <td>|</td>
+                <td>Periodo: {{ movsData.fechaDesde }}/{{ movsData.fechaHasta }}</td>
+            </tr>
+        </table>
+    </fieldset>
+            
+            <div style="height: 10px;"></div>
+
+    <table cellspacing="5px" cellpadding="5px" rules="rows">
+        <tr>
+            <td>#</td>
+            <td>Fecha</td>
+            <td>Nro. orden</td>
+            <td>Cliente</td>
+            <td>B. sujeta a comision($)</td>
+            <td>Comision(%)</td>
+            <td>Importe($)</td>
+        </tr>
+        {% for item in movimientos %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.getIdOrdenPub.getFecha|date('d-m-Y') }}</td>
+                <td><a href="{{ path('showOrdenPub', {'nombre': item.getIdOrdenPub}) }}" target="_blank" id="underlined">OP/{{ item.getIdOrdenPub.getIdCliente.getIdAgencia }}-{{ item.getIdOrdenPub }}</a></td>
+                <td>{{ item.getIdOrdenPub.getIdCliente.getComercio }}</td>
+                <td align="center">{{ item.getIdOrdenPub.getTotal|number_format(2, ',', '.') }}</td>
+                <td align="center">{{ item.getPorcentaje|number_format(2, ',', '.') }}</td>
+                <td align="center">{{ item.getImporteBase|number_format(2, ',', '.') }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Total base:</td>
+            <td align="center">${{ movsData.subTot|number_format(2, ',', '.') }}</td>
+            <td>Total liquidación:</td>
+            <td align="center">${{ liquidacion.getTotal|number_format(2, ',', '.') }}</td>
+        </tr>
+    </table>
+        
+        <div style="height: 10px;"></div>
+    
+    <button type="reset" onclick="window.location='{{ path('showLiquidaciones') }}'">Volver</button>
+    <button onclick="window.open('{{ path('createCCPdf', {'id': liquidacion.getId}) }}')">Exportar a pdf</button>
+
+{% endblock %}

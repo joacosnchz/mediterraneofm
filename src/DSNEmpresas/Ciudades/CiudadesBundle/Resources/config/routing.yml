@@ -1,0 +1,16 @@
+insertCiudades:
+  pattern : /admin/ciudades/new
+  defaults: { _controller: CiudadesBundle:Default:insert }
+showCiudades:
+  pattern : /admin/ciudades/show/{page}
+  defaults: { _controller: CiudadesBundle:Default:show, page: 1 }
+  requirements:
+      page: \d+
+showCiudad:
+  pattern : /admin/ciudad/show/{id}/{nombre}.{_format}
+  defaults: { _controller: CiudadesBundle:Default:showOne }
+  requirements:
+      _format: html
+deleteCiudades:
+  pattern : /admin/ciudades/delete/{id}
+  defaults: { _controller: CiudadesBundle:Default:delete }

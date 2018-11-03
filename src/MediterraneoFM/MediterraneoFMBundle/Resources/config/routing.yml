@@ -1,0 +1,21 @@
+homepage:
+    pattern:  /
+    defaults: { _controller: MediterraneoFMBundle:Home:home }
+    
+licencia:
+    pattern:  /licencia.{_format}
+    defaults: { _controller: MediterraneoFMBundle:Home:licence }
+    requirements:
+        _format: html
+    
+popup:
+    pattern: /popup.html
+    defaults: { _controller: MediterraneoFMBundle:Transform:pop }
+  
+test:
+  pattern: /crear-codigo-barras.html
+  defaults: { _controller: MediterraneoFMBundle:Test:test }
+
+mail:
+  pattern: /enviar-mail-prueba.html
+  defaults: { _controller: MediterraneoFMBundle:Home:enviarMail }

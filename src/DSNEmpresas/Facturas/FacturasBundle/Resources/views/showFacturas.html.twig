@@ -1,0 +1,35 @@
+{% extends 'ListadosBundle::listados.html.twig' %}
+
+{% block title %}Lista de facturas{% endblock %}
+
+{% block entidad %}facturas{% endblock %}
+
+{% block datos %}<td>Nro. factura</td><td>Nombre</td><td>Ciudad</td><td>Condición de vta.</td><td>Cantidad/es</td><td>Descripcion/es</td><td>Precio/s unitario/s</td><td>Total</td>{% endblock %}
+
+{% block datos_lista %}
+<td><input type="checkbox" name="link[]" value="{{ item.getId }}" id="{{ item.getId }}"></td>
+<td>{{ item.getNFactura }}</td>
+<td>{{ item.getNombre }}</td>
+<td>{{ item.getIdCiudad.getNombre }}</td>
+<td>{{ item.getCondicionVenta }}</td>
+<td>{{ item.getCantidad }}</td>
+<td>{{ item.getDescripcion }}</td>
+<td>{{ item.getPUnitario }}</td>
+<td>{{ item.getTotal }}</td>
+{% endblock %}
+
+{% block botones %}
+<td><button name="nuevo" onclick="window.location='{{ path('insertFacturas') }}'" />Nuevo</button></td>
+<td><button id="borrar">Borrar</button></td>
+{% endblock %}
+
+{% block mostrar %}
+Mostrar: 
+<form name="Facturas" action="{{ path('showFacturas', {'page': 1}) }}" method="POST">
+    <input id="Facturas" name="Facturas" value="{{ app.session.get('Facturas') }}" size="1" maxlength="3">
+</form>
+{% endblock %}
+
+{% block pages %}{{ paginate(pager, 'showFacturas') }}{% endblock %}
+
+{% block borrar_route %}var route = "{{ path('deleteFactura', { 'id': "PLACEHOLDER" }) }}";{% endblock %}
